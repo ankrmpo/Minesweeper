@@ -1,0 +1,73 @@
+body
+{
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+@font-face
+{
+    font-family: title;
+    src: url("title.ttf");
+}
+
+@font-face
+{
+    font-family: welcome;
+    src: url("welcome.ttf");
+}
+
+header
+{
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 290%;
+    text-align: center;
+}
+
+span
+{
+    font-family: title, Georgia, Arial;
+    font-size: 200%;
+}
+
+h2
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 220%;
+    text-align: center;
+}
+
+button
+{
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    font-family: welcome, Georgia, Arial;
+    font-size: 220%;
+    background-color: #CD5C5C;
+    transform: translate(-50%, -50%);
+    min-width: 120%;
+}
+
+div.button-login
+{
+    position: absolute;
+    top: 50%;
+    left: 45%;
+}
+
+div.button-register
+{
+    position: absolute;
+    top: 50%;
+    left: 55%;
+}
