@@ -49,6 +49,12 @@
     {
         coll[i].addEventListener("click", function() 
         {
+            for(var j = 0; j < coll.length; j++)
+            {
+                var con = coll[j].nextElementSibling;
+                con.style.display = "none";
+            }
+
             this.classList.toggle("active");
             var content = this.nextElementSibling;
             if (content.style.display === "block") content.style.display = "none";
