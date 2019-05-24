@@ -46,7 +46,21 @@ h2
     text-align: center;
 }
 
-button
+#Login
+{
+    position: absolute;
+    top: 55%;
+    left: 42%;
+}
+
+#Register
+{
+    position: absolute;
+    top: 55%;
+    left: 58%;
+}
+
+.collapsible
 {
     border-radius: 15px;
     border-style: solid;
@@ -55,19 +69,32 @@ button
     font-size: 220%;
     background-color: #CD5C5C;
     transform: translate(-50%, -50%);
-    min-width: 120%;
+    min-width: 10%;
 }
 
-div.button-login
+.active, .collapsible:hover
 {
-    position: absolute;
-    top: 50%;
-    left: 45%;
+    background-color: rgb(163, 79, 135);
 }
 
-div.button-register
+.content
 {
+    display: none;
+    text-align: center;
+    overflow: hidden;
     position: absolute;
-    top: 50%;
-    left: 55%;
+    top: 65%;
+    left: 40%;
+    font-family: welcome, Georgia, Arial;
+    font-size: 220%;
 }
+
+.confirm
+{
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    font-family: welcome, Georgia, Arial;
+    font-size: 120%;
+    background-color: #CD5C5C;
+}   

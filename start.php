@@ -23,12 +23,17 @@ function pokusaj_registracije()
 
 function crtaj_login()
 {
-
+    require_once __DIR__ . '/view/login.php';
 }
 
 function crtaj_register()
 {
-    
+    require_once __DIR__ . '/view/register.php';
+}
+
+function crtaj_welcome_screen()
+{
+    require_once __DIR__ . '/index.php';
 }
 
 ?>
