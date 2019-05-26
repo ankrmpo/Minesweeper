@@ -74,7 +74,7 @@ h2
 
 .active, .collapsible:hover
 {
-    background-color: rgb(163, 79, 135);
+    background-color: rgb(185, 54, 65);
 }
 
 .content
@@ -97,4 +97,9 @@ h2
     font-family: welcome, Georgia, Arial;
     font-size: 120%;
     background-color: #CD5C5C;
-}   
+}
+
+.confirm:hover
+{
+    background-color: rgb(185, 54, 65);
+}
