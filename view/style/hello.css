@@ -1,0 +1,146 @@
+body
+{
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+@font-face
+{
+    font-family: title;
+    src: url("title.ttf");
+}
+
+@font-face
+{
+    font-family: welcome;
+    src: url("welcome.ttf");
+}
+
+header
+{
+    position: absolute;
+    top: 15%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+}
+
+h1
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 350%;
+    text-align: center;
+}
+
+div.menu
+{
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    font-family: welcome, Georgia, Arial;
+    font-size: 200%;
+    text-align: center;
+}
+
+a
+{
+    text-decoration: none;
+    display: inline-block;
+    padding: 18%;
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    min-width: 120%;
+}
+
+a:hover
+{
+    background-color:  red;
+}
+
+.tooltip1 .tooltiptext1
+{
+    visibility: hidden;
+    min-width: 250%;
+    background-color: orange;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 18%;
+    
+    position: absolute;
+    z-index: 1;
+    top: -5%;
+    left: 160%;
+}
+
+.tooltip1:hover .tooltiptext1
+{ 
+    visibility: visible;
+}
+
+.tooltip2 .tooltiptext2
+{
+    visibility: hidden;
+    min-width: 250%;
+    background-color: orange;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 18%;
+    
+    position: absolute;
+    z-index: 1;
+    top: 20%;
+    left: 160%;
+}
+
+.tooltip2:hover .tooltiptext2
+{ 
+    visibility: visible;
+}
+
+.tooltip3 .tooltiptext3
+{
+    visibility: hidden;
+    min-width: 250%;
+    background-color: orange;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 18%;
+    
+    position: absolute;
+    z-index: 1;
+    top: 45%;
+    left: 160%;
+}
+
+.tooltip3:hover .tooltiptext3
+{ 
+    visibility: visible;
+}
+
+.tooltip4 .tooltiptext4
+{
+    visibility: hidden;
+    min-width: 250%;
+    background-color: orange;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 18%;
+    
+    position: absolute;
+    z-index: 1;
+    top: 70%;
+    left: 160%;
+}
+
+.tooltip4:hover .tooltiptext4
+{ 
+    visibility: visible;
+}

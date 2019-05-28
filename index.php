@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <title>💣 Minesweeper 💣</title>
+<?php require_once __DIR__ . '/view/_header.php'; ?>
     <link rel="stylesheet" type="text/css" href="view/style/welcome.css">
 </head>
 <body>
@@ -63,5 +58,4 @@
     }
     </script>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/view/_footer.php'; ?>
