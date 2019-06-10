@@ -1,61 +1,25 @@
-<?php require_once __DIR__ . '/view/_header.php'; ?>
-    <link rel="stylesheet" type="text/css" href="view/style/welcome.css">
-</head>
-<body>
-    <header>
-        <h1>Welcome to <br><br><span>Minesweeper multiplayer!</span></h1>
-        <br>
-        <h2>Join us, it's a bomb ;)</h2>
-    </header>
-    <br>
+<?php
 
-    <button class="collapsible" id="Login">Login</button>
-    <div class="content">
-    <form action="login.php" method="post">
-        <label>Username: </label><input type="text" name="username" id="username">
-        <br>
-        <br>
-        <label>Password: </label><input type="password" name="password" id="password">
-        <br>
-        <br>
-        <button class="confirm" type="submit" name="login">Confirm</button>
-    </form>
-    </div>
+require_once __DIR__ . '/model/db.class.php';
 
-    <button class="collapsible" id="Register">Register</button>
-    <div class="content">
-        <label>Username: </label><input type="text" name="username" id="username">
-        <br>
-        <br>
-        <label>Password: </label><input type="password" name="password" id="password">
-        <br>
-        <br>
-        <label>E-mail: </label><input type="text" name="mail" id="mail">
-        <br>
-        <br>
-        <button class="confirm" type="submit" name="login">Confirm</button>
-    </div>
+function ispisiFormuZaLogin()
+{
+    require_once __DIR__ . '/view/welcome.php';
+}
 
-    <script>
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
+function pokusaj_logina_uspio()
+{
+    //tu provjeravamo uspješan ili neuspješan login/register
+    return false;
+}
 
-    for (i = 0; i < coll.length; i++) 
-    {
-        coll[i].addEventListener("click", function() 
-        {
-            for(var j = 0; j < coll.length; j++)
-            {
-                var con = coll[j].nextElementSibling;
-                con.style.display = "none";
-            }
+function pokreniAplikaciju()
+{
+    require_once 'choose.php';
+}
 
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "block") content.style.display = "none";
-            else content.style.display = "block";
-        });
-    }
-    </script>
+if(pokusaj_logina_uspio()) pokreniAplikaciju();
 
-<?php require_once __DIR__ . '/view/_footer.php'; ?>
+else ispisiFormuZaLogin();
+
+?>
