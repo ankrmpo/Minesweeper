@@ -24,6 +24,7 @@ class MemberService
     {
         try
         {
+            $db=DB::getConnection();
             $st = $db->prepare('SELECT username, password FROM Members WHERE username=:username');
             $st->execute(array('username' => $_POST['username']));
         }
@@ -38,6 +39,26 @@ class MemberService
 
         if(password_verify($_POST['password'], $row['password'] ) ) return $_POST['username'];
         else return false;
+    }
+
+    function getAccountDetails()
+    {
+        try
+        {
+            $db = DB::getConnection();
+            $st = $db->prepare('SELECT * FROM Account WHERE username=:username');
+            $st->execute(array('username' => $_SESSION['username']));
+        }
+        catch(PDOException $e)
+        {
+            echo 'Greska: ' . $e->getMessage();
+        }
+
+        if($st->rowCount() !== 1)
+            return null;
+        
+        $row = $st->fetch();
+        return $row;
     }
 
 };

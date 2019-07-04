@@ -15,4 +15,12 @@
             <button type="submit" id="save">Save</button>
         </div>
         
+        <script>
+            $(document).ready(function()
+            {
+                var info = <?php echo json_encode($data); ?>;
+                info = JSON.parse(info);
+            });
+            
+        </script>
 <?php require_once __DIR__ . '/_footer.php'; ?>
