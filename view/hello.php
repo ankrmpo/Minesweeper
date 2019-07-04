@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        <h1>Hello,</h1>
+        <h1>Hello, </h1>
     </header>
 
     <div class="menu">
@@ -19,8 +19,8 @@
     <script>
         $(document).ready(function()
         {
-            var username=<?php echo $username; ?>;
-            $("<h1>").append(username);
+            var username="<?php echo $username; ?>";
+            $("h1").append(username+"!");
         });
     </script>
 
