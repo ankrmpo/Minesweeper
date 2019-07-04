@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once __DIR__ . '/model/db.class.php';
 
 function ispisiFormuZaLogin()
@@ -10,13 +12,22 @@ function ispisiFormuZaLogin()
 function pokusaj_logina_uspio()
 {
     if(!(isset($_POST['login']) && isset($_POST['username']) && isset($_POST['password']))) return false;
-    # login
-    else return false;
+    $_SESSION['username']=$_POST['username'];
+    $_SESSION['password']=$_POST['password'];
+
+    return false;
 }
 
 function pokusaj_registracije()
 {
-    if(isset($_POST['register']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['mail'])) return true;
+    if(isset($_POST['register']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['mail'])) 
+    {
+        $_SESSION['username']=$_POST['username'];
+        $_SESSION['password']=$_POST['password'];
+        $_SESSION['mail']=$_POST['mail'];
+        
+        return true;
+    }
     else return false;
 }
 
@@ -33,7 +44,7 @@ function pokreniAplikaciju()
     require_once 'choose.php';
 }
 
-if($username = pokusaj_logina_uspio()) pokreniAplikaciju();
+if(pokusaj_logina_uspio()) pokreniAplikaciju();
 
 else if(pokusaj_registracije()) registriraj_novog_korisnika();
 

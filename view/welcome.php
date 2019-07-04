@@ -11,7 +11,7 @@
 
     <button class="collapsible" id="Login">Login</button>
     <div class="content">
-    <form action="login.php" method="post">
+    <form action="index.php" method="post">
         <label>Username: </label><input type="text" name="username" id="username">
         <br>
         <br>
@@ -24,6 +24,7 @@
 
     <button class="collapsible" id="Register">Register</button>
     <div class="content">
+    <form action="index.php" method="post">
         <label>Username: </label><input type="text" name="username" id="username">
         <br>
         <br>
@@ -34,6 +35,7 @@
         <br>
         <br>
         <button class="confirm" type="submit" name="login">Confirm</button>
+    </form>
     </div>
 
     <script>

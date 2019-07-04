@@ -1,16 +1,16 @@
 <?php
 
-require_once __DIR__ . '/../model/projectservice.class.php';
+require_once __DIR__ . '/../model/memberservice.class.php';
 
-class all_projectsController
+class rankingController
 {
     function index()
     {
-        $ls=new ProjectService();
+        $ls=new MemberService();
 
-        $projectList=$ls->getAllProjects();
+        $ranks=$ls->getRanks();
 
-        require_once __DIR__ . '/../view/all_projects.php';
+        require_once __DIR__ . '/../view/ranking.php';
     }
 };
 
