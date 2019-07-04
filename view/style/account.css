@@ -1,7 +1,36 @@
+@font-face
+{
+    font-family: title;
+    src: url("title.ttf");
+}
+
 body
 {
     background-image: url("background.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
+    border: solid;
+    vertical-align: bottom;
+    height: 97vh;
+}
+
+h1
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 350%;
+    text-align: center;
+}
+
+textarea
+{
+    vertical-align: top;
+}
+
+.account_info
+{
+    border: solid;
+    margin: auto;
+    width: 30%;
+    text-align: center;
 }
