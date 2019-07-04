@@ -49,7 +49,7 @@ class MemberService
         try
         {
             $db = DB::getConnection();
-            $st = $db->prepare('SELECT * FROM Account WHERE username=:username');
+            $st = $db->prepare('SELECT * FROM Acunt WHERE username=:username');
             $st->execute(array('username' => $_SESSION['username']));
         }
         catch(PDOException $e)
