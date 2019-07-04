@@ -20,6 +20,8 @@
             {
                 var info = <?php echo json_encode($data); ?>;
                 info = JSON.parse(info);
+
+                
             });
             
         </script>
