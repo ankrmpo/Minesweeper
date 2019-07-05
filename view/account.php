@@ -6,14 +6,14 @@
         <h1>My account</h1>
     </header>
     <body>
-        <div class="account_info">
+        <form action="choose.php?rt=" class="account_info">
             <div class="username">Username: </div>
             <div class="mail">e-mail: </div>
             First name: <input type="text" class="first_name"><br>
             Last name: <input type="text" class="last_name"><br>
             Info: <textarea rows="5" cols="30" class="info"></textarea><br>
             <button type="submit" id="save">Save</button>
-        </div>
+        </form>
         
         <script>
             $(document).ready(function()
