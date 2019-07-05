@@ -8,7 +8,7 @@ class rankingController
     {
         $ls=new MemberService();
 
-        $ranks=$ls->getRanks();
+        $ranks=$ls->getRanking();
 
         require_once __DIR__ . '/../view/ranking.php';
     }

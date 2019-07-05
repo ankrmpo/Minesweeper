@@ -4,6 +4,7 @@ if(!isset($_SESSION))
     session_start();
 
 require_once __DIR__ . '/db.class.php';
+require_once __DIR__ . '/ranking.class.php';
 
 class MemberService
 {
@@ -108,6 +109,29 @@ class MemberService
         
         $row = $st->fetch();
         return $row;
+    }
+
+    function getRanking()
+    {
+        $ranks=array();
+        
+        try
+        {
+            $db = DB::getConnection();
+            $st = $db->prepare('SELECT * FROM Ranking ORDER BY points DESC');
+            $st->execute();
+        }
+        catch(PDOException $e)
+        {
+            echo 'Greska: ' . $e->getMessage();
+        }
+
+        while($row=$st->fetch())
+        {
+            $ranks[]=new Rank($row['username'],$row['points']);
+        }
+
+        return $ranks;
     }
 
 };

@@ -1,0 +1,83 @@
+body
+{
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+@font-face
+{
+    font-family: title;
+    src: url("title.ttf");
+}
+
+@font-face
+{
+    font-family: welcome;
+    src: url("welcome.ttf");
+}
+
+h1
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 350%;
+    text-align: center;
+}
+
+.tablica
+{
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: auto;
+    width: 30%;
+    font-size: 150%;
+    font-family: welcome, Georgia, Arial;
+    text-align: center;
+    background-color: orangered
+}
+
+.tablica th, .tablica td 
+{
+    border: 2px solid black;
+    height: 30px;
+    color: black;
+    text-align: center;
+}
+
+.tablica tr:nth-child(even){background-color: rgba(240, 11, 22, 0.856);}
+
+.tablica tr:hover {background-color: orange;}
+
+.tablica th
+{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: orange;
+    color: black;
+}
+
+a
+{
+    text-decoration: none;
+    text-align: center;
+    font-family: welcome, Georgia, Arial;
+    font-size: 150%;
+    display: inline-block;
+    padding: 1%;
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    min-width: 10%;
+}
+
+a:hover {background-color: orange;}
+
+.back
+{
+    position: absolute;
+    right: 5%;
+    top: 5%;
+}
