@@ -5,28 +5,27 @@
     <header>
         <h1>My account</h1>
     </header>
-    <body>
-        <form action="choose.php?rt=" class="account_info">
-            <div class="username">Username: </div>
-            <div class="mail">e-mail: </div>
-            First name: <input type="text" class="first_name"><br>
-            Last name: <input type="text" class="last_name"><br>
-            Info: <textarea rows="5" cols="30" class="info"></textarea><br>
-            <button type="submit" id="save">Save</button>
-        </form>
-        
-        <script>
-            $(document).ready(function()
-            {
-                var information = <?php echo json_encode($data); ?>;
-                information = JSON.parse(info);
+    <a href="choose.php" id="back">Back to menu</a>
+    <form action="choose.php?rt=my_account/changeData" method="POST" class="account_info">
+        <div id="username" class="bubble">Username: </div>
+        <div id="mail" class="bubble">e-mail: </div>
+        <div class="bubble">First name: <input type="text" id="first_name" name="first_name"></div>
+        <div class="bubble">Last name: <input type="text" id="last_name" name="last_name"></div>
+        <div class="bubble">Info: <textarea rows="5" cols="30" id="info" name="info"></textarea></div>
+        <button type="submit" id="save">Save</button>
+    </form>
+    
+    <script>
+        $(document).ready(function()
+        {
+            var inf = <?php echo json_encode($data); ?>;
 
-                $(information['username']).appendTo( ".username" );
-                $(information['email']).appendTo(".mail");
-                $(".first_name").val(information['first_name']);
-                $(".last_name").val(information['last_name']);
-                $(".info").val(information['info']);
-            });
-            
-        </script>
+            $("#username").append(inf['username']);
+            $("#mail").append(inf['email']);
+            $("#first_name").val(inf['first_name']);
+            $("#last_name").val(inf['last_name']);
+            $("#info").val(inf['info']);
+        });
+        
+    </script>
 <?php require_once __DIR__ . '/_footer.php'; ?>

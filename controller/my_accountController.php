@@ -11,6 +11,15 @@ class my_accountController
         
         require_once __DIR__ . '/../view/account.php';
     }
+
+    function changeData()
+    {
+        $ls = new MemberService();
+        $ls->changeAccountDetails();
+        $data = $ls->getAccountDetails();
+        
+        require_once __DIR__ . '/../view/account.php';
+    }
 };
 
 ?>

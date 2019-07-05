@@ -110,6 +110,19 @@ class MemberService
         return $row;
     }
 
+    function changeAccountDetails()
+    {
+        try
+        {
+            $db = DB::getConnection();
+            $st = $db->prepare('UPDATE Account SET first_name=:first_name, last_name=:last_name, info=:info WHERE username=:username');
+            $st->execute(array( 'username' => $_SESSION['username'], 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'], 'info' => $_POST['info']));
+        }
+        catch(PDOException $e)
+        {
+            echo 'Greska: ' . $e->getMessage();
+        }
+    }
 };
 
 ?>

@@ -1,5 +1,11 @@
 @font-face
 {
+    font-family: welcome;
+    src: url("welcome.ttf");
+}
+
+@font-face
+{
     font-family: title;
     src: url("title.ttf");
 }
@@ -10,9 +16,38 @@ body
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    border: solid;
-    vertical-align: bottom;
-    height: 97vh;
+}
+
+header
+{
+    margin-top: 3%;
+}
+
+#back
+{
+    text-decoration: none;
+    text-align: center;
+    float: right;
+    font-family: welcome, Georgia, Arial;
+    font-size: 170%;
+    margin-bottom: 3%;
+
+    padding: 1%; 
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    min-width: 10%;
+
+    position: absolute;
+    top: 5%;
+    right: 5%;
+}
+
+#back:hover
+{
+    background-color: orange;
 }
 
 h1
@@ -29,8 +64,58 @@ textarea
 
 .account_info
 {
-    border: solid;
-    margin: auto;
-    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3%;
+    width: 50%;
     text-align: center;
+    font-size: 170%;
+    font-family: welcome, Georgia, Arial;
 }
+
+.bubble
+{
+    padding-top: 5%;
+    padding-bottom: 5%;
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    min-width: 100%;
+    vertical-align: middle;
+    margin-bottom: 1%;
+}
+
+.bubble:hover
+{
+    background-color: red;
+}
+
+#save
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 170%;
+    width: 50%;
+    margin-bottom: 3%;
+
+    padding-top: 2%;
+    padding-bottom: 2%;
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    width: 30%;
+}
+
+button:hover
+{
+    background-color: orange;
+}
+
+#first_name, #last_name, #info
+{
+    font-size: 90%;
+}
+
