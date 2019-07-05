@@ -92,7 +92,7 @@ textarea
     background-color: red;
 }
 
-#save
+.save
 {
     font-family: welcome, Georgia, Arial;
     font-size: 170%;
@@ -109,7 +109,7 @@ textarea
     width: 30%;
 }
 
-button:hover
+.save:hover
 {
     background-color: orange;
 }

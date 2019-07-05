@@ -18,18 +18,10 @@ body
     src: url("welcome.ttf");
 }
 
-header
-{
-    position: absolute;
-    top: 15%;
-    left: 40%;
-    transform: translate(-50%, -50%);
-}
-
 h1
 {
     font-family: welcome, Georgia, Arial;
-    font-size: 350%;
+    font-size: 390%;
     text-align: center;
 }
 
@@ -47,13 +39,14 @@ a
 {
     text-decoration: none;
     display: inline-block;
-    padding: 18%;
+    padding-top: 25%;
+    padding-bottom: 25%;
     color: black;
     background-color: orangered;
     border-radius: 15px;
     border-style: solid;
     border-color: black;
-    min-width: 120%;
+    min-width: 200%;
 }
 
 a:hover
@@ -64,17 +57,18 @@ a:hover
 .tooltip1 .tooltiptext1
 {
     visibility: hidden;
-    min-width: 250%;
+    width: 355%;
     background-color: orange;
     color: black;
     text-align: center;
     border-radius: 6px;
-    padding: 18%;
+    padding-top: 25%;
+    padding-bottom: 25%;
     
     position: absolute;
     z-index: 1;
     top: -5%;
-    left: 160%;
+    left: 203%;
 }
 
 .tooltip1:hover .tooltiptext1
@@ -85,17 +79,18 @@ a:hover
 .tooltip2 .tooltiptext2
 {
     visibility: hidden;
-    min-width: 250%;
+    min-width: 355%;
     background-color: orange;
     color: black;
     text-align: center;
     border-radius: 6px;
-    padding: 18%;
+    padding-top: 25%;
+    padding-bottom: 25%;
     
     position: absolute;
     z-index: 1;
     top: 20%;
-    left: 160%;
+    left: 203%;
 }
 
 .tooltip2:hover .tooltiptext2
@@ -106,17 +101,18 @@ a:hover
 .tooltip3 .tooltiptext3
 {
     visibility: hidden;
-    min-width: 250%;
+    min-width: 355%;
     background-color: orange;
     color: black;
     text-align: center;
     border-radius: 6px;
-    padding: 18%;
+    padding-top: 25%;
+    padding-bottom: 25%;
     
     position: absolute;
     z-index: 1;
     top: 45%;
-    left: 160%;
+    left: 203%;
 }
 
 .tooltip3:hover .tooltiptext3
@@ -127,17 +123,18 @@ a:hover
 .tooltip4 .tooltiptext4
 {
     visibility: hidden;
-    min-width: 250%;
+    min-width: 355%;
     background-color: orange;
     color: black;
     text-align: center;
     border-radius: 6px;
-    padding: 18%;
+    padding-top: 25%;
+    padding-bottom: 25%;
     
     position: absolute;
     z-index: 1;
     top: 70%;
-    left: 160%;
+    left: 203%;
 }
 
 .tooltip4:hover .tooltiptext4

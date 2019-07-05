@@ -12,7 +12,7 @@
         <div class="bubble">First name: <input type="text" id="first_name" name="first_name"></div>
         <div class="bubble">Last name: <input type="text" id="last_name" name="last_name"></div>
         <div class="bubble">Info: <textarea rows="5" cols="30" id="info" name="info"></textarea></div>
-        <button type="submit" id="save">Save</button>
+        <button type="submit" class="save">Save</button>
     </form>
     
     <script>
