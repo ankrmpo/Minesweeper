@@ -34,7 +34,7 @@
         <label>E-mail: </label><input type="text" name="mail" id="mail">
         <br>
         <br>
-        <button class="confirm" type="submit" name="login">Confirm</button>
+        <button class="confirm" type="submit" name="register">Confirm</button>
     </form>
     </div>
 
