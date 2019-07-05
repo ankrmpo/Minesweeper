@@ -111,7 +111,6 @@ class MemberService
         return $row;
     }
 
-<<<<<<< HEAD
     function getRanking()
     {
         $ranks=array();
@@ -121,21 +120,11 @@ class MemberService
             $db = DB::getConnection();
             $st = $db->prepare('SELECT * FROM Ranking ORDER BY points DESC');
             $st->execute();
-=======
-    function changeAccountDetails()
-    {
-        try
-        {
-            $db = DB::getConnection();
-            $st = $db->prepare('UPDATE Account SET first_name=:first_name, last_name=:last_name, info=:info WHERE username=:username');
-            $st->execute(array( 'username' => $_SESSION['username'], 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'], 'info' => $_POST['info']));
->>>>>>> 25ab03bd05f1281769dfe5b543a4f985c167acdf
         }
         catch(PDOException $e)
         {
             echo 'Greska: ' . $e->getMessage();
         }
-<<<<<<< HEAD
 
         while($row=$st->fetch())
         {
@@ -144,10 +133,23 @@ class MemberService
 
         return $ranks;
     }
+    
+            
+    function changeAccountDetails()
+    {
+        try
+        {
+            $db = DB::getConnection();
+            $st = $db->prepare('UPDATE Account SET first_name=:first_name, last_name=:last_name, info=:info WHERE username=:username');
+            $st->execute(array( 'username' => $_SESSION['username'], 'first_name' => $_POST['first_name'], 'last_name' => $_POST['last_name'], 'info' => $_POST['info']));
+        }
+        catch(PDOException $e)
+        {
+            echo 'Greska: ' . $e->getMessage();
+        }
 
-=======
     }
->>>>>>> 25ab03bd05f1281769dfe5b543a4f985c167acdf
+
 };
 
 ?>
