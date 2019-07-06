@@ -22,11 +22,10 @@
         var username="<?php echo $username; ?>";
         $(document).ready(function()
         {
-            IspisiNemaMjesta();
-            //CanWeStart();
+            IWantToJoin(username);
         });
 
-        /*function IWantToJoin(username)
+        function IWantToJoin(username)
         {
             $.ajax(
             {
@@ -45,21 +44,51 @@
                         if(data.username=="full") IspisiNemaMjesta();
                         else if(data.username==username) CanWeStart();
                     }
+
+                    else IWantToJoin(username);
                 },
                 error: function( xhr, status )
                 {
                     console.log( "IWantToJoin :: error :: status = " + status );
 
                     if( status === "timeout" )
-                        IspisiNemaMjesta();
+                        IWantToJoin();
                 }
             });
         }
 
-        function CanWeStart()
+        function CanWeStart(username)
         {
+            $.ajax(
+            {
+                url: "ista serverska skripta",
+                dataType: "json",
+                data:
+                {
+                    username:username,
+                    response:""
+                },
+                success: function( data )
+                {
+                    console.log( "CanWeStart :: success :: data = " + JSON.stringify( data ) );
 
-        }*/
+                    if( typeof( data.error ) === "undefined" )
+                    {
+                        if(data.response=="yes") StartGame(username);
+                        else if(data.response=="no") CanWeStart(username);
+                    }
+
+                    else CanWeStart(username);
+                },
+                error: function( xhr, status )
+                {
+                    console.log( "CanWeStart :: error :: status = " + status );
+
+                    if( status === "timeout" )
+                        CanWeStart(username);
+                }
+            });
+        }
 
         function IspisiNemaMjesta()
         {
@@ -69,6 +98,12 @@
             $('#no').append('<img id="sorry" src="view/style/sorry.jpg" />');
             $('#no').append('<br><br>');
             $('#no').append('<a class="back" href="choose.php">Back to menu</a>');
+        }
+
+        function StartGame(username)
+        {
+            AskForStatus(username);
+
         }
 
     </script>
