@@ -1,5 +1,6 @@
 <?php
 
+if(!isset($_SESSION)) session_start();
 require_once __DIR__ . '/../model/memberservice.class.php';
 
 class my_accountController
