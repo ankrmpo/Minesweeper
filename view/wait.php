@@ -15,6 +15,7 @@
         </div>
     </div>
     <div id="no">
+        <div class="text"></div>
     </div>
 
     <script>
@@ -63,9 +64,11 @@
         function IspisiNemaMjesta()
         {
             var text="The game is occupied, we are so sorry...";
-            $("#no").append(document.createTextNode(text));
+            $(".text").append(document.createTextNode(text));
             $('#no').append('<br><br>');
             $('#no').append('<img id="sorry" src="view/style/sorry.jpg" />');
+            $('#no').append('<br><br>');
+            $('#no').append('<a class="back" href="choose.php">Back to menu</a>');
         }
 
     </script>

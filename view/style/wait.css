@@ -1,0 +1,48 @@
+body
+{
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+@font-face
+{
+    font-family: title;
+    src: url("title.ttf");
+}
+
+@font-face
+{
+    font-family: welcome;
+    src: url("welcome.ttf");
+}
+
+a
+{
+    text-decoration: none;
+    text-align: center;
+    font-family: welcome, Georgia, Arial;
+    font-size: 150%;
+    display: inline-block;
+    padding: 1%;
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    min-width: 10%;
+}
+
+a:hover {background-color: orange;}
+
+#no
+{
+    text-align: center;
+}
+
+.text
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 380%;
+}
