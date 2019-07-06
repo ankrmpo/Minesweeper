@@ -6,30 +6,35 @@
     <link rel="stylesheet" type="text/css" href="view/style/wait.css">
 </head>
 <body>
-    <div class="main">
-        <div id="wait">
-
-        </div>
-        <div id="players">
-
-        </div>
+    <div id="game">
     </div>
     <div id="no">
         <div class="text"></div>
     </div>
 
     <script>
+        //Znam da ima puno komentara i da su neki predetaljni,ali kad nismo skupa fizički, ne mogu ti drukčije objasnit svoje ideje...
+        //E i ja mislim da server na ovaj način ni ne treba znat kome šalje,samo šalje poruku ovisno o svojim varijablama i tipu poruke,znači stvarno kao chat
+
+        //username šaljemo serveru sa svakom porukom da zna koji igrač treba staviti u polje na početku i kome treba dodijeliti/oduzeti bodove
         var username="<?php echo $username; ?>";
+        //moja označava zastavicu ovog usera,server nam ju daje ukoliko je CanWeStart() uspjesan
+        var moja=-2;
+        //zastavice svih igrača,moja je jedna od njih,ovo je ako imamo 4 igrača/ili možemo staviti da dohvaćamo ovo polje sa servera
+        var zastavice=Array(10,11,12,13);
         $(document).ready(function()
         {
+            //prvo šaljemo serveru da se želimo pridružiti
             IWantToJoin(username);
+            //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
+            $(".polja").on( "click", OdigrajPotez(event) );
         });
 
         function IWantToJoin(username)
         {
             $.ajax(
             {
-                url: "neka serverska skripta",
+                url: /*"neka serverska skripta"*/,
                 dataType: "json",
                 data:
                 {
@@ -41,16 +46,18 @@
 
                     if( typeof( data.error ) === "undefined" )
                     {
+                        //ako server vrati string full,ispisujemo sorry poruku
                         if(data.username=="full") IspisiNemaMjesta();
+                        //ako vrati naše ime,uspješno smo se prijavili i čekamo ostale
                         else if(data.username==username) CanWeStart();
                     }
-
+                    //ako je greška probamo opet
                     else IWantToJoin(username);
                 },
                 error: function( xhr, status )
                 {
                     console.log( "IWantToJoin :: error :: status = " + status );
-
+                    //ako je greška probamo opet
                     if( status === "timeout" )
                         IWantToJoin();
                 }
@@ -61,7 +68,7 @@
         {
             $.ajax(
             {
-                url: "ista serverska skripta",
+                url: /*"ista serverska skripta"*/,
                 dataType: "json",
                 data:
                 {
@@ -74,8 +81,11 @@
 
                     if( typeof( data.error ) === "undefined" )
                     {
-                        if(data.response=="yes") StartGame(username);
-                        else if(data.response=="no") CanWeStart(username);
+                        //ako je no probamo opet,možda da stavimo neko čekanje?ili na serveru?
+                        if(data.response=="no") CanWeStart(username);
+                        //ako možemo krenuti s igrom,dobijemo broj zastavice koje smo mi,npr 12
+                        //server ih može dijeliti redom ili nekim random postupkom
+                        else moja=data.response;
                     }
 
                     else CanWeStart(username);
@@ -89,7 +99,7 @@
                 }
             });
         }
-
+        //sorry stranica s gumbom za natrag,sve je već css-ano
         function IspisiNemaMjesta()
         {
             var text="The game is occupied, we are so sorry...";
@@ -99,11 +109,126 @@
             $('#no').append('<br><br>');
             $('#no').append('<a class="back" href="choose.php">Back to menu</a>');
         }
-
-        function StartGame(username)
+        //ovo će stalno zahtijevati od servera da pošalje trenutačno stanje igre
+        function CheckGameStatus(username)
         {
-            AskForStatus(username);
+            $.ajax(
+            {
+                url: /*"ista serverska skripta"*/,
+                dataType: "json",
+                data:
+                {
+                    //ovo šaljemo samo da server zna da ga ne pita netko tko nije dio igre
+                    username:username,
+                    //tu spremamo stanje igre
+                    field:Array()
+                },
+                success: function( data )
+                {
+                    console.log( "CheckGameStatus :: success :: data = " + JSON.stringify( data ) );
+                    //ako je uspješno,server vraća Array(Array(...),
+                    //                                   Array(...)
+                    //                                   ...
+                    //                                   Array(...)) tj to u php obliku,prevodi se ovdje u json,točkice su brojevi
+                    //koji onda ispisujemo i idemo dalje, nisam sigurna je li ovo pravo mjesto da opet provjeravamo stanje,ali negdje moramo da bude sve u toku
+                    if( typeof( data.error ) === "undefined" )
+                    {
+                        IscrtajField(data.field);
+                        CheckGameStatus(username);
+                    }
 
+                    else CheckGameStatus(username);
+                },
+                error: function( xhr, status )
+                {
+                    console.log( "CheckGameStatus :: error :: status = " + status );
+
+                    if( status === "timeout" )
+                        CheckGameStatus(username);
+                }
+            });
+        }
+        //crta trenutno stanje
+        function IscrtajField(field)
+        {
+            var size=field.length();
+            var table=$("<table>").attr('id',"field");
+            for(var i=0;i<size;++i)
+            {
+                var tr=$("<tr>");
+                for(var j=0;j<size;++j)
+                {
+                    var td=$("<td>");
+                    //svima damo istu klasu da gore provjerimo jel kliknuto,tj je li netko odigrao potez
+                    var polje=$("<input type='button' id='"i+j"'>").addClass("polja");
+                    //-1 je bomba
+                    if(field[i][j]==-1)
+                    {
+                        polje.html("💣");
+                        polje.attr("disabled", "disabled");
+                    }
+                    //9 je ono sivo polje koje se samo otvorilo uz brojeve,ne možemo ka kliknut
+                    else if(field[i][j]==9) polje.attr("disabled", "disabled");
+                    //je li zastavica i čija je
+                    else if($.inArray(field[i][j],zastavice))
+                    {
+                        //ovo je zapravo CRNA ZASTAVICA!!!,vidi se bijelo iz nekog super html razloga,to je ako je moja
+                        if(field[i][j]==moja) polje.html("🏴");
+                        else
+                        {
+                            //ovo je zapravo BIJELA ZASTAVICA!!!,vidi se crno iz nekog super html razloga,to je ako nije moja
+                            polje.html("🏳️");
+                            //i ne možemo ju kliknut onda
+                            polje.attr("disabled", "disabled");
+                        }
+                    }
+                    //inače je neki broj,samo ga ispišemo i ne možemo ga dirat
+                    else if(field[i][j]!=0)
+                    {
+                        polje.html(field[i][j]);
+                        polje.attr("disabled", "disabled");
+                    }
+                    polje.appendTo(td);
+                    
+                    tr.append(td);
+                }
+                table.append(tr);
+            }
+            $('#game').append(table);
+        }
+        //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
+        function OdigrajPotez(event)
+        {
+            $.ajax(
+            {
+                url: "ista serverska skripta",
+                dataType: "json",
+                data:
+                {
+                    username:username,
+                    potez: $(this).attr('id'),
+                    klik: event,
+                    field:Array()
+                },
+                success: function( data )
+                {
+                    console.log( "OdigrajPotez :: success :: data = " + JSON.stringify( data ) );
+
+                    if( typeof( data.error ) === "undefined" )
+                    {
+                        IscrtajField(data.field);
+                    }
+
+                    else CheckGameStatus(username);
+                },
+                error: function( xhr, status )
+                {
+                    console.log( "OdigrajPotez :: error :: status = " + status );
+
+                    if( status === "timeout" )
+                        OdigrajPotez(username);
+                }
+            });
         }
 
     </script>
