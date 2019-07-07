@@ -26,7 +26,7 @@
             //prvo šaljemo serveru da se želimo pridružiti
             IWantToJoin(username);
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
-            $(".polja").on( "click", OdigrajPotez(event) );
+            // $(".polja").on( "click", OdigrajPotez(event) );
             //ako kliknemo na izlaz iz igre
             // $(".exit").on( "click", ExitTheGame(username) );
         });
@@ -67,7 +67,11 @@
                         }
                     }
                     //ako je greška probamo opet
-                    else IWantToJoin(username);
+                    else
+                    {
+                        console.log(data.error);
+                        IWantToJoin(username);
+                    }
                 },
                 error: function( xhr, status )
                 {
@@ -78,7 +82,7 @@
                 }
             });
         }
-
+        /*
         function CanWeStart(username)
         {
             $.ajax(
@@ -130,6 +134,7 @@
                 {
                     //ovo šaljemo samo da server zna da ga ne pita netko tko nije dio igre
                     username:username,
+                    timestamp: timestamp,
                     whoSent: "CheckGameStatus",
                     //tu spremamo stanje igre
                     field:Array()
@@ -268,7 +273,7 @@
                         ExitTheGame(username);
                 }
             });
-        }
+        }*/
 
     </script>
 </body>
