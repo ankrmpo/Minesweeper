@@ -62,7 +62,7 @@
                             {
                                 moja = zastavice[fl]; // dobio zastavicu i čeka početak igre
                                 console.log(moja);
-                                CanWeStart();
+                                CanWeStart(username);
                             }
                         }
                     }
@@ -82,19 +82,19 @@
                 }
             });
         }
-        /*
+        
         function CanWeStart(username)
         {
             $.ajax(
             {
                 url: "view/serve.php",
-                dataType: "json",
                 data:
                 {
-                    username:username,
+                    username: username,
                     timestamp: timestamp,
                     whoSent: "CanWeStart"
                 },
+                dataType: "json",
                 success: function( data )
                 {
                     console.log( "CanWeStart :: success :: data = " + JSON.stringify( data ) );
@@ -123,6 +123,7 @@
             $('#no').append('<br><br>');
             $('#no').append('<a class="back" href="choose.php">Back to menu</a>');
         }
+        /*
         //ovo će stalno zahtijevati od servera da pošalje trenutačno stanje igre
         function CheckGameStatus(username)
         {
