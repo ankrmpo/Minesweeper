@@ -55,7 +55,7 @@ if($_GET['whoSent'] === "IWantToJoin") // igrač se želi priključiti, pošalji
         $novi = [];
         $novi['username'] = $_GET['username'];
         $novi['indeks'] = $broj_igraca;
-        file_put_contents($fileIgraci, json_encode($novi), FILE_APPEND);
+        file_put_contents($fileIgraci, json_encode($novi) . "\n", FILE_APPEND);
         $response['flag'] = $broj_igraca;
         ++$broj_igraca; //povecaj broj igraca i spremi u datoteku
         file_put_contents($fileBrojIgraca, "" . $broj_igraca);
