@@ -24,10 +24,21 @@ for($i=0;$i<$dim;++$i)
 }
 
 for($i=0;$i<$dim;++$i)
-{
     for($j=0;$j<$dim;++$j)
-        echo $EndField[$i][$j];
-    echo '<br>';    
-}
+        if($EndField[$i][$j]==-1)
+        {
+            if($j!=0) $EndField[$i][$j-1]++;
+            if($j!=$dim-1) $EndField[$i][$j+1]++;
+            if($i!=0) $EndField[$i-1][$j]++;
+            if($i!=$dim-1) $EndField[$i+1][$j]++;
+            if($i!=0 && $j!=0) $EndField[$i-1][$j-1]++;
+            if($i!=0 && $j!=$dim-1) $EndField[$i-1][$j+1]++;
+            if($i!=$dim-1 && $j!=0) $EndField[$i+1][$j-1]++;
+            if($i!=$dim-1 && $j!=$dim-1) $EndField[$i+1][$j+1]++;
+        }
+        
+for($i=0;$i<$dim;++$i)
+    for($j=0;$j<$dim;++$j)
+        if($EndField[$i][$j]==0) $EndField[$i][$j]=9;
 
 ?>
