@@ -16,15 +16,15 @@ if(!file_exists($brojIgraca))
     $error = $error . "File " . $brojIgraca . " doesn't exist!";
 else if(!is_readable($brojIgraca))
     $error = $error . "File " . $brojIgraca . " is not readable!";
-else if(!is_writable($brojIgraca)){
-    $error = $error . "File " . $brojIgraca - " is not writable!";
+else if(!is_writable($brojIgraca))
+    $error = $error . "File " . $brojIgraca . " is not writable!";
 
 // if(!file_exists($igraci))
 //     $error = $error . "File " . $igraci . " doesn't exist!";
 // else if(!is_readable($igraci))
 //     $error = $error . "File " . $igraci . " is not readable!";
 // else if(!is_writable($igraci))
-//     $error = $error . "File " . $igraci - " is not writable!";
+//     $error = $error . "File " . $igraci . " is not writable!";
 
 if($error !== "")
 {
