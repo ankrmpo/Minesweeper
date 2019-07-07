@@ -16,6 +16,7 @@
         //E i ja mislim da server na ovaj način ni ne treba znat kome šalje,samo šalje poruku ovisno o svojim varijablama i tipu poruke,znači stvarno kao chat
         //username šaljemo serveru sa svakom porukom da zna koji igrač treba staviti u polje na početku i kome treba dodijeliti/oduzeti bodove
         var username="<?php echo $username; ?>";
+        var timestamp = 0;
         //moja označava zastavicu ovog usera,server nam ju daje ukoliko je IWantToJoin uspjesan
         var moja=-2;
         //zastavice svih igrača,moja je jedna od njih,ovo je ako imamo 4 igrača/ili možemo staviti da dohvaćamo ovo polje sa servera
@@ -27,25 +28,31 @@
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
             $(".polja").on( "click", OdigrajPotez(event) );
             //ako kliknemo na izlaz iz igre
-            $(".exit").on( "click", ExitTheGame(username) );
+            // $(".exit").on( "click", ExitTheGame(username) );
         });
+
         function IWantToJoin(username)
         {
             $.ajax(
             {
-                url: "serve.php",
-                dataType: "json",
+                url: "view/serve.php",
                 data:
                 {
-                    username:username
+                    username: username,
+                    response: ""
                 },
+                dataType: "json",
                 success: function( data )
                 {
                     console.log( "IWantToJoin :: success :: data = " + JSON.stringify( data ) );
                     if( typeof( data.error ) === "undefined" )
                     {
                         //ako server vrati string full,ispisujemo sorry poruku
-                        if(data.flag=="full") IspisiNemaMjesta();
+                        if(data.flag=="full")
+                        {
+                            console.log(data.flag);
+                            IspisiNemaMjesta();
+                        }
                         //ako vrati indeks zastavice, uspješno smo se prijavili i čekamo ostale
                         else if(!isNaN(data.flag)) // nije vratio full pa provjeri je li dobiven indeks zastavice
                         {
@@ -54,6 +61,7 @@
                             if(fl >= 0 && fl <= 3)
                             {
                                 moja = zastavice[fl]; // dobio zastavicu i čeka početak igre
+                                console.log(moja);
                                 CanWeStart();
                             }
                         }
@@ -70,16 +78,17 @@
                 }
             });
         }
+
         function CanWeStart(username)
         {
             $.ajax(
             {
-                url: "serve.php",
+                url: "view/serve.php",
                 dataType: "json",
                 data:
                 {
-                    username:username,
-                    response:""
+                    username:username
+
                 },
                 success: function( data )
                 {
@@ -114,7 +123,7 @@
         {
             $.ajax(
             {
-                url: /*"ista serverska skripta"*/,
+                url: "view/game.php",
                 dataType: "json",
                 data:
                 {
@@ -158,7 +167,7 @@
                 {
                     var td=$("<td>");
                     //svima damo istu klasu da gore provjerimo jel kliknuto,tj je li netko odigrao potez
-                    var polje=$("<input type='button' id='"i+j"'>").addClass("polja");
+                    var polje=$("<input type='button' id='"+i+j+"'>").addClass("polja");
                     //-1 je bomba
                     if(field[i][j]==-1)
                     {
@@ -202,7 +211,7 @@
         {
             $.ajax(
             {
-                url: "ista serverska skripta",
+                url: "view/serve.php",
                 dataType: "json",
                 data:
                 {
@@ -233,7 +242,7 @@
         {
             $.ajax(
             {
-                url: "ista serverska skripta",
+                url: "view/serve.php",
                 dataType: "json",
                 data:
                 {

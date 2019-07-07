@@ -1,4 +1,5 @@
 <?php
+
 function sendJSONandExit($message)
 {
     header('Content-type:application/json;charset=utf-8');
@@ -8,7 +9,7 @@ function sendJSONandExit($message)
 }
 
 $error = "";
-$filename = 'br_igraca.txt';
+$filename = 'docs/br_igraca.txt';
 
 if(!file_exists($filename))
     $error = $error . "File " . $filename . " doesn't exist!";
@@ -29,6 +30,7 @@ if(!isset($_GET['response'])) //ili nije ništa postavljeno ili je funkcija IWan
 {
     if(!isset($_GET['username'])) // nije postavljeno, vrati error
     {
+        
         $response = [];
         $response['error'] = "Username not defined!";
 
@@ -79,5 +81,5 @@ else // ili username nije postavljen ili ga je pozvala funkcija CanWeStart
     }
 }
 
-// dodati timestamp i odraditi ostatak
+
 ?>
