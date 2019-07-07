@@ -1,5 +1,4 @@
 <?php require_once __DIR__ . '/_header.php'; 
-
     if(!isset($_SESSION)) session_start();
     $username=$_SESSION['username'];
 ?>
@@ -15,10 +14,9 @@
     <script>
         //Znam da ima puno komentara i da su neki predetaljni,ali kad nismo skupa fizički, ne mogu ti drukčije objasnit svoje ideje...
         //E i ja mislim da server na ovaj način ni ne treba znat kome šalje,samo šalje poruku ovisno o svojim varijablama i tipu poruke,znači stvarno kao chat
-
         //username šaljemo serveru sa svakom porukom da zna koji igrač treba staviti u polje na početku i kome treba dodijeliti/oduzeti bodove
         var username="<?php echo $username; ?>";
-        //moja označava zastavicu ovog usera,server nam ju daje ukoliko je CanWeStart() uspjesan
+        //moja označava zastavicu ovog usera,server nam ju daje ukoliko je IWantToJoin uspjesan
         var moja=-2;
         //zastavice svih igrača,moja je jedna od njih,ovo je ako imamo 4 igrača/ili možemo staviti da dohvaćamo ovo polje sa servera
         var zastavice=Array(10,11,12,13);
@@ -29,12 +27,11 @@
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
             $(".polja").on( "click", OdigrajPotez(event) );
         });
-
         function IWantToJoin(username)
         {
             $.ajax(
             {
-                url: /*"neka serverska skripta"*/,
+                url: "serve.php",
                 dataType: "json",
                 data:
                 {
@@ -43,13 +40,21 @@
                 success: function( data )
                 {
                     console.log( "IWantToJoin :: success :: data = " + JSON.stringify( data ) );
-
                     if( typeof( data.error ) === "undefined" )
                     {
                         //ako server vrati string full,ispisujemo sorry poruku
-                        if(data.username=="full") IspisiNemaMjesta();
-                        //ako vrati naše ime,uspješno smo se prijavili i čekamo ostale
-                        else if(data.username==username) CanWeStart();
+                        if(data.flag=="full") IspisiNemaMjesta();
+                        //ako vrati indeks zastavice, uspješno smo se prijavili i čekamo ostale
+                        else if(!isNaN(data.flag)) // nije vratio full pa provjeri je li dobiven indeks zastavice
+                        {
+                            var fl = data.flag;
+                            fl = Number(fl);
+                            if(fl >= 0 && fl <= 3)
+                            {
+                                moja = zastavice[fl]; // dobio zastavicu i čeka početak igre
+                                CanWeStart();
+                            }
+                        }
                     }
                     //ako je greška probamo opet
                     else IWantToJoin(username);
@@ -63,12 +68,11 @@
                 }
             });
         }
-
         function CanWeStart(username)
         {
             $.ajax(
             {
-                url: /*"ista serverska skripta"*/,
+                url: "serve.php",
                 dataType: "json",
                 data:
                 {
@@ -78,22 +82,16 @@
                 success: function( data )
                 {
                     console.log( "CanWeStart :: success :: data = " + JSON.stringify( data ) );
-
                     if( typeof( data.error ) === "undefined" )
                     {
                         //ako je no probamo opet,možda da stavimo neko čekanje?ili na serveru?
                         if(data.response=="no") CanWeStart(username);
-                        //ako možemo krenuti s igrom,dobijemo broj zastavice koje smo mi,npr 12
-                        //server ih može dijeliti redom ili nekim random postupkom
-                        else moja=data.response;
                     }
-
                     else CanWeStart(username);
                 },
                 error: function( xhr, status )
                 {
                     console.log( "CanWeStart :: error :: status = " + status );
-
                     if( status === "timeout" )
                         CanWeStart(username);
                 }
@@ -136,13 +134,11 @@
                         IscrtajField(data.field);
                         CheckGameStatus(username);
                     }
-
                     else CheckGameStatus(username);
                 },
                 error: function( xhr, status )
                 {
                     console.log( "CheckGameStatus :: error :: status = " + status );
-
                     if( status === "timeout" )
                         CheckGameStatus(username);
                 }
@@ -213,24 +209,20 @@
                 success: function( data )
                 {
                     console.log( "OdigrajPotez :: success :: data = " + JSON.stringify( data ) );
-
                     if( typeof( data.error ) === "undefined" )
                     {
                         IscrtajField(data.field);
                     }
-
                     else CheckGameStatus(username);
                 },
                 error: function( xhr, status )
                 {
                     console.log( "OdigrajPotez :: error :: status = " + status );
-
                     if( status === "timeout" )
                         OdigrajPotez(username);
                 }
             });
         }
-
     </script>
 </body>
 
