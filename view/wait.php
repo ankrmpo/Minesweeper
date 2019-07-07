@@ -26,6 +26,8 @@
             IWantToJoin(username);
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
             $(".polja").on( "click", OdigrajPotez(event) );
+            //ako kliknemo na izlaz iz igre
+            $(".exit").on( "click", ExitTheGame(username) );
         });
         function IWantToJoin(username)
         {
@@ -191,6 +193,9 @@
                 table.append(tr);
             }
             $('#game').append(table);
+            $('#game').append('<br><br>');
+            //da možemo izaći iz igre
+            $('#game').append('<a class="exit" href="choose.php">Exit the game</a>');
         }
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
         function OdigrajPotez(event)
@@ -223,6 +228,35 @@
                 }
             });
         }
+
+        function ExitTheGame(username)
+        {
+            $.ajax(
+            {
+                url: "ista serverska skripta",
+                dataType: "json",
+                data:
+                {
+                    username:username,
+                },
+                success: function( data )
+                {
+                    console.log( "ExitTheGame :: success :: data = " + JSON.stringify( data ) );
+                    if( typeof( data.error ) === "undefined" )
+                    {
+                        //želimo samo izaći,ne treba ništa napraviti valjda
+                    }
+                    else ExitTheGame(username);
+                },
+                error: function( xhr, status )
+                {
+                    console.log( "ExitTheGame :: error :: status = " + status );
+                    if( status === "timeout" )
+                        ExitTheGame(username);
+                }
+            });
+        }
+
     </script>
 </body>
 
