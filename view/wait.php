@@ -39,7 +39,7 @@
                 data:
                 {
                     username: username,
-                    response: ""
+                    whoSent: "IWantToJoin",
                 },
                 dataType: "json",
                 success: function( data )
@@ -73,8 +73,8 @@
                 {
                     console.log( "IWantToJoin :: error :: status = " + status );
                     //ako je greška probamo opet
-                    if( status === "timeout" )
-                        IWantToJoin();
+                    // if( status === "timeout" )
+                    //     IWantToJoin();
                 }
             });
         }
@@ -87,15 +87,16 @@
                 dataType: "json",
                 data:
                 {
-                    username:username
-
+                    username:username,
+                    timestamp: timestamp,
+                    whoSent: "CanWeStart"
                 },
                 success: function( data )
                 {
                     console.log( "CanWeStart :: success :: data = " + JSON.stringify( data ) );
                     if( typeof( data.error ) === "undefined" )
                     {
-                        //ako je no probamo opet,možda da stavimo neko čekanje?ili na serveru?
+                        timestamp = data.timestamp;
                         if(data.response=="no") CanWeStart(username);
                     }
                     else CanWeStart(username);
@@ -129,6 +130,7 @@
                 {
                     //ovo šaljemo samo da server zna da ga ne pita netko tko nije dio igre
                     username:username,
+                    whoSent: "CheckGameStatus",
                     //tu spremamo stanje igre
                     field:Array()
                 },
@@ -216,6 +218,7 @@
                 data:
                 {
                     username:username,
+                    whoSent: "OdigrajPotez",
                     potez: $(this).attr('id'),
                     klik: event,
                     field:Array()
@@ -247,6 +250,7 @@
                 data:
                 {
                     username:username,
+                    whoSent: "ExitTheGame"
                 },
                 success: function( data )
                 {

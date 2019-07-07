@@ -26,17 +26,23 @@ if($error !== "")
     sendJSONandExit($response);
 }
 
-if(!isset($_GET['response'])) //ili nije ništa postavljeno ili je funkcija IWantToJoin pozvala
+if(!isset($_GET['username']))
 {
-    if(!isset($_GET['username'])) // nije postavljeno, vrati error
-    {
-        
-        $response = [];
-        $response['error'] = "Username not defined!";
+    $response = [];
+    $response['error'] = "Username not defined!";
 
-        sendJSONandExit($response);
-    }
-    else // postavljen username, znači IWantToJoin je pozvala
+    sendJSONandExit($response);
+}
+else if(!isset($_GET['whoSent']))
+{
+    $response = [];
+    $response['error'] = "Action undefined!";
+
+    sendJSONandExit($response);
+}
+else // sve postavljeno pa obradi funkciju
+{
+    if($_GET['whoSent'] === "IWantToJoin") // igrač se želi priključiti, pošalji mu odgovor
     {
         $broj_igraca = file_get_contents($filename);
         $broj_igraca = intval($broj_igraca);
@@ -57,29 +63,31 @@ if(!isset($_GET['response'])) //ili nije ništa postavljeno ili je funkcija IWan
             sendJSONandExit($response);
         }
     }
-}
-else // ili username nije postavljen ili ga je pozvala funkcija CanWeStart
-{
-    if(!isset($_GET['username'])) // nije postavljen username
-    {
-        $response = [];
-        $response['error'] = "Username not defined!";
 
-        sendJSONandExit($response);
-    }
-    else // CanWeStart vraćamo samo yes or no
+    else if($_GET['whoSent'] === "CanWeStart") // igrač provjerava može li igra početi
     {
+        $lastchecked = isset($_GET['timestamp']) ? $_GET['timestamp'] : 0;
+        $currentcheck = filemtime($filename);
+
+        while($currentcheck <= $lastchecked)
+        {
+            usleep(10000);
+            clearstatcache();
+            $currentcheck = filemtime($filename);
+        }
+
+        // došao novi igrač
         $broj_igraca = file_get_contents($filename);
         $broj_igraca = intval($broj_igraca);
-
+        $response['timestamp'] = $currentcheck;
+        
         if($broj_igraca === 4)
             $response['response'] = "yes";
         else
-            $response['response'] = "false";
+            $response['response'] = "no";
 
         sendJSONandExit($response);
     }
 }
-
 
 ?>
