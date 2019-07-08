@@ -11,7 +11,7 @@ for($i=0;$i<$dim;++$i)
     array_push($EndField,$red);
 }
 
-$koliko=0.17*$dim*$dim;
+$koliko=0.20*$dim*$dim;
 $trenutno=0;
 $positions=array();
 for($i=0;$i<$dim;++$i)
