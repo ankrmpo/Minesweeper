@@ -10,28 +10,30 @@
     <div id="no">
         <div class="text"></div>
     </div>
+    <br><br>
+    <button type="button" class="exit">Exit the game</button>
 
     <script>
         //Znam da ima puno komentara i da su neki predetaljni,ali kad nismo skupa fizički, ne mogu ti drukčije objasnit svoje ideje...
         //E i ja mislim da server na ovaj način ni ne treba znat kome šalje,samo šalje poruku ovisno o svojim varijablama i tipu poruke,znači stvarno kao chat
         //username šaljemo serveru sa svakom porukom da zna koji igrač treba staviti u polje na početku i kome treba dodijeliti/oduzeti bodove
         var username="<?php echo $username; ?>";
-        var timestamp = 0;
+        var timestamp1 = 0, timestamp2 = 0;
         //moja označava zastavicu ovog usera,server nam ju daje ukoliko je IWantToJoin uspjesan
         var moja=-2;
         //zastavice svih igrača,moja je jedna od njih,ovo je ako imamo 4 igrača/ili možemo staviti da dohvaćamo ovo polje sa servera
-        var zastavice=Array(10,11,12,13);
+        var zastavice = Array();
         $(document).ready(function()
         {
             //prvo šaljemo serveru da se želimo pridružiti
-            IWantToJoin(username);
+            IWantToJoin();
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
-            // $(".polja").on( "click", OdigrajPotez(event) );
+            $(".polja").on( "click", OdigrajPotez(event) );
             //ako kliknemo na izlaz iz igre
-            // $(".exit").on( "click", ExitTheGame(username) );
+            $(".exit").on( "click", ExitTheGame);        
         });
 
-        function IWantToJoin(username)
+        function IWantToJoin()
         {
             $.ajax(
             {
@@ -58,11 +60,12 @@
                         {
                             var fl = data.flag;
                             fl = Number(fl);
+                            zastavice = data.flags;
                             if(fl >= 0 && fl <= 3)
                             {
                                 moja = zastavice[fl]; // dobio zastavicu i čeka početak igre
                                 console.log(moja);
-                                CanWeStart(username);
+                                CanWeStart();
                             }
                         }
                     }
@@ -70,7 +73,7 @@
                     else
                     {
                         console.log(data.error);
-                        IWantToJoin(username);
+                        IWantToJoin();
                     }
                 },
                 error: function( xhr, status )
@@ -83,7 +86,7 @@
             });
         }
         
-        function CanWeStart(username)
+        function CanWeStart()
         {
             $.ajax(
             {
@@ -91,7 +94,7 @@
                 data:
                 {
                     username: username,
-                    timestamp: timestamp,
+                    timestamp: timestamp1,
                     whoSent: "CanWeStart"
                 },
                 dataType: "json",
@@ -100,16 +103,17 @@
                     console.log( "CanWeStart :: success :: data = " + JSON.stringify( data ) );
                     if( typeof( data.error ) === "undefined" )
                     {
-                        timestamp = data.timestamp;
-                        if(data.response=="no") CanWeStart(username);
+                        timestamp1 = data.timestamp;
+                        if(data.response=="no") CanWeStart();
+                        else CheckGameStatus();
                     }
-                    else CanWeStart(username);
+                    else CanWeStart();
                 },
                 error: function( xhr, status )
                 {
                     console.log( "CanWeStart :: error :: status = " + status );
                     if( status === "timeout" )
-                        CanWeStart(username);
+                        CanWeStart();
                 }
             });
         }
@@ -123,50 +127,45 @@
             $('#no').append('<br><br>');
             $('#no').append('<a class="back" href="choose.php">Back to menu</a>');
         }
-        /*
         //ovo će stalno zahtijevati od servera da pošalje trenutačno stanje igre
-        function CheckGameStatus(username)
+        function CheckGameStatus()
         {
             $.ajax(
             {
-                url: "view/game.php",
+                url: "view/serve.php",
                 dataType: "json",
                 data:
                 {
                     //ovo šaljemo samo da server zna da ga ne pita netko tko nije dio igre
                     username:username,
-                    timestamp: timestamp,
+                    timestamp: timestamp2,
                     whoSent: "CheckGameStatus",
-                    //tu spremamo stanje igre
-                    field:Array()
+                    cache: new Date().getTime()
                 },
                 success: function( data )
                 {
                     console.log( "CheckGameStatus :: success :: data = " + JSON.stringify( data ) );
-                    //ako je uspješno,server vraća Array(Array(...),
-                    //                                   Array(...)
-                    //                                   ...
-                    //                                   Array(...)) tj to u php obliku,prevodi se ovdje u json,točkice su brojevi
-                    //koji onda ispisujemo i idemo dalje, nisam sigurna je li ovo pravo mjesto da opet provjeravamo stanje,ali negdje moramo da bude sve u toku
                     if( typeof( data.error ) === "undefined" )
                     {
-                        IscrtajField(data.field);
-                        CheckGameStatus(username);
+                        timestamp2 = data.timestamp;
+                        IscrtajField(JSON.parse(data.field));
+                        CheckGameStatus();
                     }
-                    else CheckGameStatus(username);
+                    else CheckGameStatus();
                 },
                 error: function( xhr, status )
                 {
                     console.log( "CheckGameStatus :: error :: status = " + status );
                     if( status === "timeout" )
-                        CheckGameStatus(username);
+                        CheckGameStatus();
                 }
             });
         }
+        
         //crta trenutno stanje
         function IscrtajField(field)
         {
-            var size=field.length();
+            var size=field.length;
             var table=$("<table>").attr('id',"field");
             for(var i=0;i<size;++i)
             {
@@ -204,15 +203,11 @@
                         polje.attr("disabled", "disabled");
                     }
                     polje.appendTo(td);
-                    
                     tr.append(td);
                 }
                 table.append(tr);
             }
             $('#game').append(table);
-            $('#game').append('<br><br>');
-            //da možemo izaći iz igre
-            $('#game').append('<a class="exit" href="choose.php">Exit the game</a>');
         }
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
         function OdigrajPotez(event)
@@ -236,19 +231,20 @@
                     {
                         IscrtajField(data.field);
                     }
-                    else CheckGameStatus(username);
+                    else CheckGameStatus();
                 },
                 error: function( xhr, status )
                 {
                     console.log( "OdigrajPotez :: error :: status = " + status );
                     if( status === "timeout" )
-                        OdigrajPotez(username);
+                        OdigrajPotez();
                 }
             });
         }
 
-        function ExitTheGame(username)
+        function ExitTheGame()
         {
+            console.log("Usao");
             $.ajax(
             {
                 url: "view/serve.php",
@@ -263,20 +259,20 @@
                     console.log( "ExitTheGame :: success :: data = " + JSON.stringify( data ) );
                     if( typeof( data.error ) === "undefined" )
                     {
-                        //želimo samo izaći,ne treba ništa napraviti valjda
+                        $("body").html("<div class='izlazni_tekst'>You left the game before the end, dummy. Your score will be exterminated!</div>");
+                        $("body").append("<a href='choose.php' class='izlazni_button'>Back to menu</a>");
                     }
-                    else ExitTheGame(username);
+                    else ExitTheGame();
                 },
                 error: function( xhr, status )
                 {
                     console.log( "ExitTheGame :: error :: status = " + status );
                     if( status === "timeout" )
-                        ExitTheGame(username);
+                        ExitTheGame();
                 }
             });
-        }*/
+        }
 
     </script>
-</body>
 
 <?php require_once __DIR__ . '/_footer.php'; ?>
