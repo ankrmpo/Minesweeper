@@ -440,22 +440,28 @@ function otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y)
         return $trenutnaPloca;
     }
 
+    // lijevi rub
     if($x === 0)
     {
+        // gornji lijevi kut
         if($y === 0)
         {
             $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
             $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
             $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];
+            $trenutnaPloca[$x + 1][$y + 1] = $zavrsnaPloca[$x + 1][$y + 1];
             return $trenutnaPloca;
         }
+        // donji lijevi kut
         else if($y === $velicina - 1)
         {
             $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
             $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
             $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
+            $trenutnaPloca[$x + 1][$y - 1] = $zavrsnaPloca[$x + 1][$y - 1];
             return $trenutnaPloca;
         }
+        // nije kut, ima mjesta gore i dolje
         else
         {
             $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];  
@@ -467,22 +473,29 @@ function otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y)
             return $trenutnaPloca; 
         }
     }
+
+    // desni rub
     else if($x === $velicina - 1)
     {
+        // gornji desni kut
         if($y === 0)
         {
             $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
             $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
             $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];
+            $trenutnaPloca[$x - 1][$y + 1] = $zavrsnaPloca[$x - 1][$y + 1];
             return $trenutnaPloca;
         }
+        // donji desni kut
         else if($y === $velicina - 1)
         {
             $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
             $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
             $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
+            $trenutnaPloca[$x - 1][$y - 1] = $zavrsnaPloca[$x - 1][$y - 1];
             return $trenutnaPloca;
         }
+        // nije kut, ima mjesta gore i dolje
         else
         {
             $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
@@ -516,6 +529,7 @@ function otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y)
     }
     else
     {
+        $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
         $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y - 1);
         $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
         $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y - 1);
