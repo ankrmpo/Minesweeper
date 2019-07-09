@@ -21,6 +21,7 @@
         var timestamp1 = 0, timestamp2 = 0;
         //moja označava zastavicu ovog usera,server nam ju daje ukoliko je IWantToJoin uspjesan
         var moja=-2;
+        var bodovi=0;
         //zastavice svih igrača,moja je jedna od njih,ovo je ako imamo 4 igrača/ili možemo staviti da dohvaćamo ovo polje sa servera
         var zastavice = Array();
         $(document).ready(function()
@@ -148,8 +149,9 @@
                     if( typeof( data.error ) === "undefined" )
                     {
                         timestamp2 = data.timestamp;
-
+                        bodovi=data.bodovi;
                         IscrtajField(JSON.parse(data.field));
+                        if(data.msg=="game-over") IscrtajGameOver();
                         
                         CheckGameStatus();
                     }
@@ -220,6 +222,8 @@
                 table.append(tr);
             }
             $('.game').append(table);
+            //$('.game').append( "br");
+            $('.game').append("Bodovi: "+bodovi);
         }
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
         function OdigrajPotez(event)

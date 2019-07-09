@@ -70,7 +70,7 @@ if($broj_igraca === 0)
     file_put_contents($fileZavrsnaIgra, json_encode($EndField));
 }
 
-$max_broj_igraca = 1;
+$max_broj_igraca = 2;
 $z = 10;
 $zastavice = [];
 for($i = 0; $i < $max_broj_igraca; ++$i)
@@ -117,6 +117,7 @@ else if($_GET['whoSent'] === "CanWeStart") // igrač provjerava može li igra po
     }
     // došao novi igrač
     $response['timestamp'] = $currentcheck;
+    $broj_igraca = intval(file_get_contents($fileBrojIgraca));
 
     if($broj_igraca === $max_broj_igraca)
         $response['response'] = "yes";
@@ -136,6 +137,14 @@ else if($_GET['whoSent'] === "CheckGameStatus")
         usleep(10000);
         clearstatcache();
         $currentcheck = filemtime($fileTrenutnaIgra);
+    }
+
+    $igraci = explode('\n', file_get_contents($fileIgraci));
+
+    for($i = 0; $i < count($igraci); ++$i)
+    {
+        $igrac = explode(',', $igraci[$i]);
+        if($igrac[0]===$_GET['username']) $response['bodovi']=$igrac[2];
     }
 
     $response['timestamp'] = $currentcheck;
@@ -200,7 +209,7 @@ else if($_GET['whoSent'] === "OdigrajPotez")
         sendJSONandExit($error);
     }
     
-    else if($event === "left")
+    else if($event === "left" && intval($trenutnaPloca[$polje[0]][$polje[1]]) === 0)
     {
         if(intval($zavrsnaPloca[$polje[0]][$polje[1]]) === -1)
         {
@@ -257,13 +266,11 @@ else if($_GET['whoSent'] === "OdigrajPotez")
         }
 
     }
-    else if($event === "right")
+    else if($event === "right" && intval($trenutnaPloca[$polje[0]][$polje[1]]) === 0)
     {
         if(intval($zavrsnaPloca[$polje[0]][$polje[1]]) !== -1)
         {
-            if(intval($zavrsnaPloca[$polje[0]][$polje[1]]) !== intval($_GET['flag']))
-            {
-                for($i = 0; $i < count($igraci); ++$i)
+            for($i = 0; $i < count($igraci); ++$i)
                 {
                     if($_GET['username'] === $igrac[$i][0])
                     {
@@ -279,12 +286,8 @@ else if($_GET['whoSent'] === "OdigrajPotez")
                 }
                 $trenutnaPloca[$polje[0]][$polje[1]] = intval($_GET['flag']);
                 file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
-            }
-            else
-            {
-                $trenutnaPloca[$polje[0]][$polje[1]] = 9;
-                file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));     
-            }
+            
+           
             $response['field'] = $trenutnaPloca;
             sendJSONandExit($response);
         }
@@ -311,6 +314,15 @@ else if($_GET['whoSent'] === "OdigrajPotez")
             $response['field'] = $trenutnaPloca;
             sendJSONandExit($response);
         }
+    }
+
+    else if($event === "right" && intval($trenutnaPloca[$polje[0]][$polje[1]]) === intval($_GET['flag']))
+    {
+        $trenutnaPloca[$polje[0]][$polje[1]] = 0;
+        file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
+
+        $response['field'] = $trenutnaPloca;
+        sendJSONandExit($response);
     }
 
     for($i = 0; $i < count($igraci); ++$i)
