@@ -174,6 +174,30 @@ else if($_GET['whoSent'] === "CheckGameStatus")
     if($game_over === true)
     {
         $response['msg'] = "game-over";
+        $igraci = explode('\n', file_get_contents($fileIgraci));
+        $igrac = [];
+
+        // dodaj bodove u bazu
+        for($i = 0; $i < count($igraci); ++$i)
+        {
+            $igrac[$i] = explode(',', $igraci[$i]);
+            
+            require_once __DIR__ . '/../model/db.class.php';
+            
+            try
+            {
+                $db = DB::getConnection();
+                $st = $db->prepare('UPDATE Ranking SET points=points+:bodovi WHERE username=:username');
+                $st->execute(array('bodovi' => intval($igrac[$i][2]), 'username' => $igrac[$i][0]));
+            }
+            catch(PDOException $e)
+            {
+                echo 'Greska: ' . $e->getMessage();
+            }
+        }
+
+        file_put_contents($fileBrojIgraca, "0");
+        file_put_contents($fileIgraci, "");
     }
     else
         $response['msg'] = "no";
