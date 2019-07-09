@@ -10,8 +10,6 @@
     <div id="no">
         <div class="text"></div>
     </div>
-    <br><br>
-    <button type="button" class="exit">Exit the game</button>
 
     <script>
         //Znam da ima puno komentara i da su neki predetaljni,ali kad nismo skupa fizički, ne mogu ti drukčije objasnit svoje ideje...
@@ -31,7 +29,7 @@
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
             $(document).on('mousedown','.polja',OdigrajPotez);
             //ako kliknemo na izlaz iz igre
-            $(".exit").on( "click", ExitTheGame);        
+            $(document).on('click','.exit',ExitTheGame);        
         });
 
         function IWantToJoin()
@@ -174,10 +172,10 @@
             var table=$("<table>").attr('class',"field");
             for(var i=0;i<size;++i)
             {
-                var tr=$("<tr class='row'>");
+                var tr=$("<tr>");
                 for(var j=0;j<size;++j)
                 {
-                    var td=$("<td class='cell'>");
+                    var td=$("<td>");
                     //svima damo istu klasu da gore provjerimo jel kliknuto,tj je li netko odigrao potez
                     var polje=$("<button type='button' id='"+i+','+j+"' class='polja'></button>");
                     $(polje).on("contextmenu", function() {return false;} );
@@ -221,9 +219,17 @@
                 }
                 table.append(tr);
             }
-            $('.game').append(table);
-            $('.game').append("<br>");
-            $('.game').append("Bodovi: "+bodovi);
+        
+            $('.game').append("<br><br>");
+            var bodoviDiv=$("<div class='bodovi'>"+"Bodovi: "+bodovi+"</div>");
+            $(bodoviDiv).append("<br><br>");
+            $(bodoviDiv).append("<button type='button' class='exit'>Exit the game</button>");
+            $('.game').append(bodoviDiv);
+            $('.game').append("<br><br><br>");
+            var tablica=$("<div class='tablica'></div>");
+            $(tablica).append(table);
+            $('.game').append(tablica);
+            
         }
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
         function OdigrajPotez(event)
@@ -282,8 +288,13 @@
                     console.log( "ExitTheGame :: success :: data = " + JSON.stringify( data ) );
                     if( typeof( data.error ) === "undefined" )
                     {
-                        $("body").html("<div class='izlazni_tekst'>You left the game before the end, dummy. Your score will be exterminated!</div>");
-                        $("body").append("<a href='choose.php' class='izlazni_button'>Back to menu</a>");
+                        var exitdiv=$("<div class='izlazni'></div>");
+                        $(exitdiv).append("<div class='izlazni_tekst'>You left the game before the end, dummy. Your score will be exterminated!</div>");
+                        $(exitdiv).append('<br><br>');
+                        $(exitdiv).append('<img id="sorry" src="view/style/exterminate.jpg" />');
+                        $(exitdiv).append('<br><br>');
+                        $(exitdiv).append("<a href='choose.php' class='izlazni_button'>Back to menu</a>");
+                        $("body").html(exitdiv);
                     }
                     else ExitTheGame();
                 },
@@ -298,7 +309,11 @@
 
         function IscrtajGameOver()
         {
-            $("body").html("Game is over!<br>Your score: " + bodovi);
+            var overdiv=$("<div class='over'></div>");
+            $(overdiv).append("<div class='overtekst'>"+"Game is over! Your score: " + bodovi+"</div>");
+            $(overdiv).append('<br><br>');
+            $(overdiv).append("<a href='choose.php' class='izlazni_button'>Back to menu</a>");
+            $("body").html(overdiv);
         }
 
     </script>
