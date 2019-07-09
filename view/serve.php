@@ -70,7 +70,7 @@ if($broj_igraca === 0)
     file_put_contents($fileZavrsnaIgra, json_encode($EndField));
 }
 
-$max_broj_igraca = 1;
+$max_broj_igraca = 2;
 $z = 10;
 $zastavice = [];
 for($i = 0; $i < $max_broj_igraca; ++$i)
@@ -139,7 +139,7 @@ else if($_GET['whoSent'] === "CheckGameStatus")
         $currentcheck = filemtime($fileTrenutnaIgra);
     }
 
-    $igraci = explode('\n', file_get_contents($fileIgraci));
+    $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
     for($i = 0; $i < count($igraci); ++$i)
     {
         $igrac = explode(',', $igraci[$i]);
@@ -174,7 +174,7 @@ else if($_GET['whoSent'] === "CheckGameStatus")
     if($game_over === true)
     {
         $response['msg'] = "game-over";
-        $igraci = explode('\n', file_get_contents($fileIgraci));
+        $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
         $igrac = [];
 
         // dodaj bodove u bazu
@@ -211,7 +211,7 @@ else if($_GET['whoSent'] === "ExitTheGame")
     --$broj_igraca;
     file_put_contents($fileBrojIgraca, "" . $broj_igraca);
 
-    $igraci = explode('\n', file_get_contents($fileIgraci));
+    $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
     file_put_contents($fileIgraci, "");
     for($i = 0; $i < count($igraci); ++$i)
     {
@@ -242,7 +242,7 @@ else if($_GET['whoSent'] === "OdigrajPotez")
 
     
 
-    $igraci = explode('\n', file_get_contents($fileIgraci));
+    $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
     file_put_contents($fileIgraci, "");
     $igrac = [];
 
@@ -342,6 +342,7 @@ else if($_GET['whoSent'] === "OdigrajPotez")
                 file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
             }
 
+            // $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y);
             $trenutnaPloca[$polje[0]][$polje[1]] = $zavrsnaPloca[$polje[0]][$polje[1]];
 
             file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
@@ -434,9 +435,9 @@ else if($_GET['whoSent'] === "OdigrajPotez")
 
 function otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y)
 {
-    if($zavrsnaPloca[$x][$y] <= 8 && $zavrsnaPloca[$x][$y] >= 1)
+    if(intval($zavrsnaPloca[$x][$y]) <= 8 && intval($zavrsnaPloca[$x][$y]) >= 1)
     {
-        $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
+        $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
         return $trenutnaPloca;
     }
 
@@ -446,30 +447,33 @@ function otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y)
         // gornji lijevi kut
         if($y === 0)
         {
-            $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-            $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
-            $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];
-            $trenutnaPloca[$x + 1][$y + 1] = $zavrsnaPloca[$x + 1][$y + 1];
+            if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+            if(intval($zavrsnaPloca[$x + 1][$y]) !== -1 && intval($trenutnaPloca[$x + 1][$y]) !== intval($zavrsnaPloca[$x + 1][$y]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
+            if(intval($zavrsnaPloca[$x][$y + 1]) !== -1 && intval($trenutnaPloca[$x][$y + 1]) !== intval($zavrsnaPloca[$x][$y + 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1);
             return $trenutnaPloca;
         }
         // donji lijevi kut
         else if($y === $velicina - 1)
         {
-            $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-            $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
-            $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
-            $trenutnaPloca[$x + 1][$y - 1] = $zavrsnaPloca[$x + 1][$y - 1];
+            if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+            if(intval($zavrsnaPloca[$x + 1][$y]) !== -1 && intval($trenutnaPloca[$x + 1][$y]) !== intval($zavrsnaPloca[$x + 1][$y]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
+            if(intval($trenutnaPloca[$x][$y - 1]) !== -1 && intval($trenutnaPloca[$x][$y - 1]) !== intval($zavrsnaPloca[$x][$y - 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
             return $trenutnaPloca;
         }
         // nije kut, ima mjesta gore i dolje
         else
         {
-            $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];  
-            $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
-            $trenutnaPloca[$x + 1][$y - 1] = $zavrsnaPloca[$x + 1][$y - 1];
-            $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
-            $trenutnaPloca[$x + 1][$y + 1] = $zavrsnaPloca[$x + 1][$y + 1];
-            $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];
+            if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]); 
+            if(intval($trenutnaPloca[$x][$y - 1]) !== -1 && intval($trenutnaPloca[$x][$y - 1]) !== intval($zavrsnaPloca[$x][$y - 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
+            if(intval($trenutnaPloca[$x + 1][$y]) !== -1 && intval($trenutnaPloca[$x + 1][$y]) !== intval($zavrsnaPloca[$x + 1][$y]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
+            if(intval($trenutnaPloca[$x][$y + 1]) !== -1 && intval($trenutnaPloca[$x][$y + 1]) !== intval($zavrsnaPloca[$x][$y + 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1);
             return $trenutnaPloca; 
         }
     }
@@ -480,64 +484,69 @@ function otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y)
         // gornji desni kut
         if($y === 0)
         {
-            $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-            $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
-            $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];
-            $trenutnaPloca[$x - 1][$y + 1] = $zavrsnaPloca[$x - 1][$y + 1];
+            if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+            if(intval($trenutnaPloca[$x - 1][$y]) !== -1 && intval($trenutnaPloca[$x - 1][$y]) !== intval($zavrsnaPloca[$x - 1][$y]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y);
+            if(intval($trenutnaPloca[$x][$y + 1]) !== -1 && intval($trenutnaPloca[$x][$y + 1]) !== intval($zavrsnaPloca[$x][$y + 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1); 
             return $trenutnaPloca;
         }
         // donji desni kut
         else if($y === $velicina - 1)
         {
-            $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-            $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
-            $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
-            $trenutnaPloca[$x - 1][$y - 1] = $zavrsnaPloca[$x - 1][$y - 1];
+            if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+            if(intval($trenutnaPloca[$x - 1][$y]) !== -1 && intval($trenutnaPloca[$x - 1][$y]) !== intval($zavrsnaPloca[$x - 1][$y]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y); 
+            if(intval($trenutnaPloca[$x][$y - 1]) !== -1 && intval($trenutnaPloca[$x][$y - 1]) !== intval($zavrsnaPloca[$x][$y - 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1); 
             return $trenutnaPloca;
         }
         // nije kut, ima mjesta gore i dolje
         else
         {
-            $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-            $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
-            $trenutnaPloca[$x - 1][$y - 1] = $zavrsnaPloca[$x - 1][$y - 1];
-            $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
-            $trenutnaPloca[$x - 1][$y + 1] = $zavrsnaPloca[$x - 1][$y + 1];
-            $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];  
+            if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+            if(intval($trenutnaPloca[$x][$y - 1]) !== -1 && intval($trenutnaPloca[$x][$y - 1]) !== intval($zavrsnaPloca[$x][$y - 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
+            if(intval($trenutnaPloca[$x - 1][$y]) !== -1 && intval($trenutnaPloca[$x - 1][$y]) !== intval($zavrsnaPloca[$x - 1][$y]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y);
+            if(intval($trenutnaPloca[$x][$y + 1]) !== -1 && intval($trenutnaPloca[$x][$y + 1]) !== intval($zavrsnaPloca[$x][$y + 1]))
+                $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1);
             return $trenutnaPloca;      
         }
     }
     else if($y === 0) // ovdje x više nije ruban jer je to pokriveno u prvom slucaju
     {
-        $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-        $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
-        $trenutnaPloca[$x - 1][$y + 1] = $zavrsnaPloca[$x - 1][$y + 1];
-        $trenutnaPloca[$x][$y + 1] = $zavrsnaPloca[$x][$y + 1];
-        $trenutnaPloca[$x + 1][$y + 1] = $zavrsnaPloca[$x + 1][$y + 1];
-        $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
+        if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+        if(intval($trenutnaPloca[$x - 1][$y]) !== -1 && intval($trenutnaPloca[$x - 1][$y]) !== intval($zavrsnaPloca[$x - 1][$y]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y);
+        if(intval($trenutnaPloca[$x][$y + 1]) !== -1 && intval($trenutnaPloca[$x][$y + 1]) !== intval($zavrsnaPloca[$x][$y + 1]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1);
+        if(intval($trenutnaPloca[$x + 1][$y]) !== -1 && intval($trenutnaPloca[$x + 1][$y]) !== intval($zavrsnaPloca[$x + 1][$y]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
         return $trenutnaPloca;
     }
     else if($y === $velicina - 1)
     {
-        $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-        $trenutnaPloca[$x - 1][$y] = $zavrsnaPloca[$x - 1][$y];
-        $trenutnaPloca[$x - 1][$y - 1] = $zavrsnaPloca[$x - 1][$y - 1];
-        $trenutnaPloca[$x][$y - 1] = $zavrsnaPloca[$x][$y - 1];
-        $trenutnaPloca[$x + 1][$y - 1] = $zavrsnaPloca[$x + 1][$y - 1];
-        $trenutnaPloca[$x + 1][$y] = $zavrsnaPloca[$x + 1][$y];
+        if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+        if(intval($trenutnaPloca[$x - 1][$y]) !== -1 && intval($trenutnaPloca[$x - 1][$y]) !== intval($zavrsnaPloca[$x - 1][$y]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y);
+        if(intval($trenutnaPloca[$x][$y - 1]) !== -1 && intval($trenutnaPloca[$x][$y - 1]) !== intval($zavrsnaPloca[$x][$y - 1]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
+        if(intval($trenutnaPloca[$x + 1][$y]) !== -1 && intval($trenutnaPloca[$x + 1][$y]) !== intval($zavrsnaPloca[$x + 1][$y]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
         return $trenutnaPloca;
     }
     else
     {
-        $trenutnaPloca[$x][$y] = $zavrsnaPloca[$x][$y];
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y - 1);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y - 1);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y + 1);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1);
-        $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y + 1);
+        if(intval($zavrsnaPloca[$x][$y]) !== -1) $trenutnaPloca[$x][$y] = intval($zavrsnaPloca[$x][$y]);
+        if(intval($trenutnaPloca[$x][$y - 1]) !== -1 && intval($trenutnaPloca[$x][$y - 1]) !== intval($zavrsnaPloca[$x][$y - 1]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y - 1);
+        if(intval($trenutnaPloca[$x - 1][$y]) !== -1 && intval($trenutnaPloca[$x - 1][$y]) !== intval($zavrsnaPloca[$x - 1][$y]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x - 1, $y);
+        if(intval($trenutnaPloca[$x + 1][$y]) !== -1 && intval($trenutnaPloca[$x + 1][$y]) !== intval($zavrsnaPloca[$x + 1][$y]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x + 1, $y);
+        if(intval($trenutnaPloca[$x][$y + 1]) !== -1 && intval($trenutnaPloca[$x][$y + 1]) !== intval($zavrsnaPloca[$x][$y + 1]))
+            $trenutnaPloca = otvori($trenutnaPloca, $zavrsnaPloca, $velicina, $x, $y + 1);
         return $trenutnaPloca;
     }
 }

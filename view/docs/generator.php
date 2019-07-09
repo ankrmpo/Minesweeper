@@ -1,6 +1,6 @@
 <?php
 
-$dim=30;
+$dim=6;
 $GameField=array();
 $EndField=array();
 
