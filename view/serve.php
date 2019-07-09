@@ -139,11 +139,7 @@ else if($_GET['whoSent'] === "CheckGameStatus")
         $currentcheck = filemtime($fileTrenutnaIgra);
     }
 
-<<<<<<< HEAD
     $igraci = explode("\n", file_get_contents($fileIgraci));
-=======
-    $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
->>>>>>> a2ec7809144371499bd6769644d6f763297ae259
     for($i = 0; $i < count($igraci); ++$i)
     {
         $igrac = explode(',', $igraci[$i]);
@@ -178,11 +174,7 @@ else if($_GET['whoSent'] === "CheckGameStatus")
     if($game_over === true)
     {
         $response['msg'] = "game-over";
-<<<<<<< HEAD
         $igraci = explode("\n", file_get_contents($fileIgraci));
-=======
-        $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
->>>>>>> a2ec7809144371499bd6769644d6f763297ae259
         $igrac = [];
 
         // dodaj bodove u bazu
@@ -219,11 +211,7 @@ else if($_GET['whoSent'] === "ExitTheGame")
     --$broj_igraca;
     file_put_contents($fileBrojIgraca, "" . $broj_igraca);
 
-<<<<<<< HEAD
     $igraci = explode("\n", file_get_contents($fileIgraci));
-=======
-    $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
->>>>>>> a2ec7809144371499bd6769644d6f763297ae259
     file_put_contents($fileIgraci, "");
     for($i = 0; $i < count($igraci); ++$i)
     {
@@ -254,11 +242,7 @@ else if($_GET['whoSent'] === "OdigrajPotez")
 
     
 
-<<<<<<< HEAD
     $igraci = explode("\n", file_get_contents($fileIgraci));
-=======
-    $igraci = explode(PHP_EOL, file_get_contents($fileIgraci));
->>>>>>> a2ec7809144371499bd6769644d6f763297ae259
     file_put_contents($fileIgraci, "");
     $igrac = [];
 
