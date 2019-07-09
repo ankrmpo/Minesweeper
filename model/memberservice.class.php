@@ -147,6 +147,8 @@ class MemberService
             echo 'Greska: ' . $e->getMessage();
         }
     }
+
+    
 };
 
 ?>
