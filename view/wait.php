@@ -141,7 +141,7 @@
                     username:username,
                     timestamp: timestamp2,
                     whoSent: "CheckGameStatus",
-                    cache: new Date().getTime()
+                    cache: new Date().getTime(),
                 },
                 success: function( data )
                 {
@@ -222,7 +222,7 @@
                 table.append(tr);
             }
             $('.game').append(table);
-            //$('.game').append( "br");
+            $('.game').append("<br>");
             $('.game').append("Bodovi: "+bodovi);
         }
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
@@ -294,6 +294,11 @@
                         ExitTheGame();
                 }
             });
+        }
+
+        function IscrtajGameOver()
+        {
+            $("body").html("Game is over!");
         }
 
     </script>

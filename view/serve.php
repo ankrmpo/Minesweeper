@@ -70,7 +70,7 @@ if($broj_igraca === 0)
     file_put_contents($fileZavrsnaIgra, json_encode($EndField));
 }
 
-$max_broj_igraca = 2;
+$max_broj_igraca = 1;
 $z = 10;
 $zastavice = [];
 for($i = 0; $i < $max_broj_igraca; ++$i)
@@ -149,6 +149,33 @@ else if($_GET['whoSent'] === "CheckGameStatus")
 
     $response['timestamp'] = $currentcheck;
     $response['field'] = file_get_contents($fileTrenutnaIgra);
+
+    $zavrsnaPloca = json_decode(file_get_contents($fileZavrsnaIgra));
+    $trenutnaPloca = json_decode(file_get_contents($fileTrenutnaIgra));
+
+    $game_over = true;
+
+    for($i = 0; $i < count($zavrsnaPloca[0]); ++$i)
+    {
+        for($j = 0; $j < count($zavrsnaPloca[0]); ++$j)
+        {
+            if( (intval($zavrsnaPloca[$i][$j]) !== -1) && (intval($zavrsnaPloca[$i][$j]) !== intval($trenutnaPloca[$i][$j])) )
+            {
+                $game_over = false;
+                break;
+            }
+            if( intval($zavrsnaPloca[$i][$j]) === -1 && !(intval($zavrsnaPloca[$i][$j] === intval($trenutnaPloca[$i][$j]) || in_array(intval($trenutnaPloca[$i][$j]), $zastavice) )))
+            {
+                $game_over = false;
+                break;
+            }
+        }
+    }
+
+    if($game_over === true)
+        $response['msg'] = "game-over";
+    else
+        $response['msg'] = "no";
 
     sendJSONandExit($response);
 }
