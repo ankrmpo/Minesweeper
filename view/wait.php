@@ -28,7 +28,7 @@
             //prvo šaljemo serveru da se želimo pridružiti
             IWantToJoin();
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
-            $(document).on('click','.game.field.row.cell.polja',OdigrajPotez);
+            $(document).on('mousedown','.polja',OdigrajPotez);
             //ako kliknemo na izlaz iz igre
             $(".exit").on( "click", ExitTheGame);        
         });
@@ -148,6 +148,7 @@
                     if( typeof( data.error ) === "undefined" )
                     {
                         timestamp2 = data.timestamp;
+
                         IscrtajField(JSON.parse(data.field));
                         
                         CheckGameStatus();
@@ -166,6 +167,7 @@
         //crta trenutno stanje
         function IscrtajField(field)
         {
+            $(".game").html("");
             var size=field.length;
             var table=$("<table>").attr('class',"field");
             for(var i=0;i<size;++i)
@@ -175,35 +177,44 @@
                 {
                     var td=$("<td class='cell'>");
                     //svima damo istu klasu da gore provjerimo jel kliknuto,tj je li netko odigrao potez
-                    var polje=$("<input type='button' id='"+i+j+"' class='polja'>");
+                    var polje=$("<button type='button' id='"+i+','+j+"' class='polja'></button>");
+                    $(polje).on("contextmenu", function() {return false;} );
                     //-1 je bomba
                     if(field[i][j]==-1)
                     {
-                        polje.html("💣");
-                        polje.attr("disabled", "disabled");
+                        $(polje).html("💣");
+                        $(polje).attr("disabled", "disabled");
                     }
                     //9 je ono sivo polje koje se samo otvorilo uz brojeve,ne možemo ga kliknut
-                    else if(field[i][j]==9) polje.attr("disabled", "disabled");
+                    else if(field[i][j]==9)
+                    {
+                        $(polje).attr("disabled", "disabled");
+                        $(polje).css("background-color", "gray");
+                    }
                     //je li zastavica i čija je
-                    else if($.inArray(field[i][j],zastavice))
+                    else if(zastavice.includes(field[i][j]) == true)
                     {
                         //ovo je zapravo CRNA ZASTAVICA!!!,vidi se bijelo iz nekog super html razloga,to je ako je moja
-                        if(field[i][j]==moja) polje.html("🏴");
+                        console.log(moja,JSON.stringify(zastavice));
+                        if(field[i][j] == moja)
+                        {
+                            $(polje).html("🏴");
+                        }
                         else
                         {
                             //ovo je zapravo BIJELA ZASTAVICA!!!,vidi se crno iz nekog super html razloga,to je ako nije moja
-                            polje.html("🏳️");
+                            $(polje).html("🏳️");
                             //i ne možemo ju kliknut onda
-                            polje.attr("disabled", "disabled");
+                            $(polje).attr("disabled", "disabled");
                         }
                     }
                     //inače je neki broj,samo ga ispišemo i ne možemo ga dirat
                     else if(field[i][j]!=0)
                     {
-                        polje.html(field[i][j]);
-                        polje.attr("disabled", "disabled");
+                        $(polje).html(field[i][j]);
+                        $(polje).attr("disabled", "disabled");
                     }
-                    polje.appendTo(td);
+                    $(polje).appendTo(td);
                     tr.append(td);
                 }
                 table.append(tr);
@@ -213,8 +224,14 @@
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
         function OdigrajPotez(event)
         {
-            console.log("bla");
-            /*$.ajax(
+            var klik;
+            if(event.button === 0)
+                klik = "left";
+            else if(event.button === 2)
+                klik = "right";
+            else klik = ".";
+            console.log(event.button);
+            $.ajax(
             {
                 url: "view/serve.php",
                 dataType: "json",
@@ -223,7 +240,8 @@
                     username:username,
                     whoSent: "OdigrajPotez",
                     potez: $(this).attr('id'),
-                    klik: event,
+                    flag: moja,
+                    klik: klik,
                     field:Array()
                 },
                 success: function( data )
@@ -241,7 +259,7 @@
                     if( status === "timeout" )
                         OdigrajPotez();
                 }
-            });*/
+            });
         }
 
         function ExitTheGame()
