@@ -177,6 +177,7 @@ else if($_GET['whoSent'] === "CheckGameStatus")
         $igraci = explode('\n', file_get_contents($fileIgraci));
         $igrac = [];
 
+        // dodaj bodove u bazu
         for($i = 0; $i < count($igraci); ++$i)
         {
             $igrac[$i] = explode(',', $igraci[$i]);
@@ -194,6 +195,9 @@ else if($_GET['whoSent'] === "CheckGameStatus")
                 echo 'Greska: ' . $e->getMessage();
             }
         }
+
+        file_put_contents($fileBrojIgraca, "0");
+        file_put_contents($fileIgraci, "");
     }
     else
         $response['msg'] = "no";
