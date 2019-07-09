@@ -1,8 +1,8 @@
 <?php
 
-$dim = 6;
-$GameField = array();
-$EndField = array();
+$dim=30;
+$GameField=array();
+$EndField=array();
 
 for($i = 0;$i < $dim; ++$i)
 {

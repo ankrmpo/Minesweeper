@@ -46,3 +46,66 @@ a:hover {background-color: orange;}
     font-family: welcome, Georgia, Arial;
     font-size: 380%;
 }
+
+button.exit
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 100%;
+    padding: 1%;
+    color: black;
+    background-color: orangered;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: black;
+    min-width: 10%;
+    text-align: center;
+}
+
+button.exit:hover {background-color: orange;}
+
+.bodovi
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 250%;
+    position: absolute;
+    top: 15%;
+    right: 5%;
+}
+
+.tablica
+{
+    text-align: center;
+}
+
+.polja
+{
+    text-align: center;
+    color: black;
+    font-size: 120%;
+    max-width: 30px;
+    max-height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.izlazni
+{
+    text-align: center;
+}
+
+.izlazni_tekst
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 380%;
+}
+
+.over
+{
+    text-align: center;
+}
+
+.overtekst
+{
+    font-family: welcome, Georgia, Arial;
+    font-size: 380%;
+}
