@@ -140,7 +140,6 @@ else if($_GET['whoSent'] === "CheckGameStatus")
     }
 
     $igraci = explode('\n', file_get_contents($fileIgraci));
-
     for($i = 0; $i < count($igraci); ++$i)
     {
         $igrac = explode(',', $igraci[$i]);
@@ -173,7 +172,9 @@ else if($_GET['whoSent'] === "CheckGameStatus")
     }
 
     if($game_over === true)
+    {
         $response['msg'] = "game-over";
+    }
     else
         $response['msg'] = "no";
 
@@ -252,7 +253,14 @@ else if($_GET['whoSent'] === "OdigrajPotez")
                         $bodovi = 0;
                     
                     $igrac[$i][2] = $bodovi;
+                    break;
                 }
+            }
+
+            for($i = 0; $i < count($igraci); ++$i)
+            {
+                $igraci[$i] = implode(',', $igrac[$i]);
+                file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
             }
 
             $trenutnaPloca[$polje[0]][$polje[1]] = intval($zavrsnaPloca[$polje[0]][$polje[1]]);
@@ -273,7 +281,14 @@ else if($_GET['whoSent'] === "OdigrajPotez")
                     $bodovi += 5;
                     
                     $igrac[$i][2] = $bodovi;
+                    break;
                 }
+            }
+
+            for($i = 0; $i < count($igraci); ++$i)
+            {
+                $igraci[$i] = implode(',', $igrac[$i]);
+                file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
             }
 
             $trenutnaPloca[$polje[0]][$polje[1]] = intval($zavrsnaPloca[$polje[0]][$polje[1]]);
@@ -284,6 +299,25 @@ else if($_GET['whoSent'] === "OdigrajPotez")
         }
         else if($zavrsnaPloca[$polje[0]][$polje[1]] === 9)
         {
+            for($i = 0; $i < count($igraci); ++$i)
+            {
+                if($_GET['username'] === $igrac[$i][0])
+                {
+                    $bodovi = $igrac[$i][2];
+                    $bodovi = intval($bodovi);
+
+                    $bodovi += 1;
+                    
+                    $igrac[$i][2] = $bodovi;
+                    break;
+                }
+            }
+            for($i = 0; $i < count($igraci); ++$i)
+            {
+                $igraci[$i] = implode(',', $igrac[$i]);
+                file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
+            }
+
             $trenutnaPloca[$polje[0]][$polje[1]] = $zavrsnaPloca[$polje[0]][$polje[1]];
 
             file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
@@ -298,21 +332,28 @@ else if($_GET['whoSent'] === "OdigrajPotez")
         if(intval($zavrsnaPloca[$polje[0]][$polje[1]]) !== -1)
         {
             for($i = 0; $i < count($igraci); ++$i)
+            {
+                if($_GET['username'] === $igrac[$i][0])
                 {
-                    if($_GET['username'] === $igrac[$i][0])
-                    {
-                        $bodovi = $igrac[$i][2];
-                        $bodovi = intval($bodovi);
+                    $bodovi = $igrac[$i][2];
+                    $bodovi = intval($bodovi);
 
-                        $bodovi -= 5;
-                        if($bodovi < 0 )
-                            $bodovi = 0;
-                        
-                        $igrac[$i][2] = $bodovi;
-                    }
+                    $bodovi -= 5;
+                    if($bodovi < 0 )
+                        $bodovi = 0;
+                    
+                    $igrac[$i][2] = $bodovi;
+                    break;
                 }
-                $trenutnaPloca[$polje[0]][$polje[1]] = intval($_GET['flag']);
-                file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
+            }
+            for($i = 0; $i < count($igraci); ++$i)
+            {
+                $igraci[$i] = implode(',', $igrac[$i]);
+                file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
+            }
+
+            $trenutnaPloca[$polje[0]][$polje[1]] = intval($_GET['flag']);
+            file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
             
            
             $response['field'] = $trenutnaPloca;
@@ -332,7 +373,13 @@ else if($_GET['whoSent'] === "OdigrajPotez")
                         $bodovi = 0;
                     
                     $igrac[$i][2] = $bodovi;
+                    break;
                 }
+            }
+            for($i = 0; $i < count($igraci); ++$i)
+            {
+                $igraci[$i] = implode(',', $igrac[$i]);
+                file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
             }
 
             $trenutnaPloca[$polje[0]][$polje[1]] = intval($_GET['flag']);
@@ -345,18 +392,18 @@ else if($_GET['whoSent'] === "OdigrajPotez")
 
     else if($event === "right" && intval($trenutnaPloca[$polje[0]][$polje[1]]) === intval($_GET['flag']))
     {
+        for($i = 0; $i < count($igraci); ++$i)
+        {
+            $igraci[$i] = implode(',', $igrac[$i]);
+            file_put_contents($fileIgraci, $igraci[$i] . "\n", FILE_APPEND);
+        }
+
         $trenutnaPloca[$polje[0]][$polje[1]] = 0;
         file_put_contents($fileTrenutnaIgra, json_encode($trenutnaPloca));
 
         $response['field'] = $trenutnaPloca;
         sendJSONandExit($response);
     }
-
-    for($i = 0; $i < count($igraci); ++$i)
-        $igraci[$i] = implode(',', $igrac[$i]);
-    
-    file_put_contents($fileIgraci, implode('\n', $igraci));
-    file_put_contents($fileIgraci, '\n', FILE_APPEND);
 
     $response['field'] = file_get_contents($fileTrenutnaIgra);
 }

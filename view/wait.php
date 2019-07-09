@@ -298,7 +298,7 @@
 
         function IscrtajGameOver()
         {
-            $("body").html("Game is over!");
+            $("body").html("Game is over!<br>Your score: " + bodovi);
         }
 
     </script>
