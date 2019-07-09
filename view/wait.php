@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="view/style/wait.css">
 </head>
 <body>
-    <div id="game">
+    <div class="game">
     </div>
     <div id="no">
         <div class="text"></div>
@@ -28,7 +28,7 @@
             //prvo šaljemo serveru da se želimo pridružiti
             IWantToJoin();
             //ukoliko smo odigrali potez klikom na field koji se sastoji od polja(sva polja su iste klase)
-            $(".polja").on( "click", OdigrajPotez(event) );
+            $(document).on('click','.game.field.row.cell.polja',OdigrajPotez);
             //ako kliknemo na izlaz iz igre
             $(".exit").on( "click", ExitTheGame);        
         });
@@ -149,6 +149,7 @@
                     {
                         timestamp2 = data.timestamp;
                         IscrtajField(JSON.parse(data.field));
+                        
                         CheckGameStatus();
                     }
                     else CheckGameStatus();
@@ -166,22 +167,22 @@
         function IscrtajField(field)
         {
             var size=field.length;
-            var table=$("<table>").attr('id',"field");
+            var table=$("<table>").attr('class',"field");
             for(var i=0;i<size;++i)
             {
-                var tr=$("<tr>");
+                var tr=$("<tr class='row'>");
                 for(var j=0;j<size;++j)
                 {
-                    var td=$("<td>");
+                    var td=$("<td class='cell'>");
                     //svima damo istu klasu da gore provjerimo jel kliknuto,tj je li netko odigrao potez
-                    var polje=$("<input type='button' id='"+i+j+"'>").addClass("polja");
+                    var polje=$("<input type='button' id='"+i+j+"' class='polja'>");
                     //-1 je bomba
                     if(field[i][j]==-1)
                     {
                         polje.html("💣");
                         polje.attr("disabled", "disabled");
                     }
-                    //9 je ono sivo polje koje se samo otvorilo uz brojeve,ne možemo ka kliknut
+                    //9 je ono sivo polje koje se samo otvorilo uz brojeve,ne možemo ga kliknut
                     else if(field[i][j]==9) polje.attr("disabled", "disabled");
                     //je li zastavica i čija je
                     else if($.inArray(field[i][j],zastavice))
@@ -207,12 +208,13 @@
                 }
                 table.append(tr);
             }
-            $('#game').append(table);
+            $('.game').append(table);
         }
         //aktivira se kad kliknemo na neko polje,šaljemo id i koji klik
         function OdigrajPotez(event)
         {
-            $.ajax(
+            console.log("bla");
+            /*$.ajax(
             {
                 url: "view/serve.php",
                 dataType: "json",
@@ -239,12 +241,11 @@
                     if( status === "timeout" )
                         OdigrajPotez();
                 }
-            });
+            });*/
         }
 
         function ExitTheGame()
         {
-            console.log("Usao");
             $.ajax(
             {
                 url: "view/serve.php",
